@@ -13,17 +13,16 @@ import networkx as nx
 from causal_discovery.algorithms.ic_algorithm import IC_Algorithm
 from causal_discovery.independence_tests.robust_regression_test import RobustRegressionTest
 
-TEST_SET_SIZE = 2000
-
 
 class Test_IC_Algorithm(TestAPI):
+    TEST_SET_SIZE = 2000
 
     def setUp(self):
-        x1 = numpy.random.normal(size=TEST_SET_SIZE)
-        x2 = x1 + numpy.random.normal(size=TEST_SET_SIZE)
-        x3 = x1 + numpy.random.normal(size=TEST_SET_SIZE)
-        x4 = x2 + x3 + numpy.random.normal(size=TEST_SET_SIZE)
-        x5 = x4 + numpy.random.normal(size=TEST_SET_SIZE)
+        x1 = numpy.random.normal(size=self.TEST_SET_SIZE)
+        x2 = x1 + numpy.random.normal(size=self.TEST_SET_SIZE)
+        x3 = x1 + numpy.random.normal(size=self.TEST_SET_SIZE)
+        x4 = x2 + x3 + numpy.random.normal(size=self.TEST_SET_SIZE)
+        x5 = x4 + numpy.random.normal(size=self.TEST_SET_SIZE)
         self.X = pd.DataFrame({'x1': x1, 'x2': x2, 'x3': x3, 'x4': x4, 'x5': x5})
         self.variable_types = {'x1': 'c', 'x2': 'c', 'x3': 'c', 'x4': 'c', 'x5': 'c'}
         self.true_neighbors = {'x1': {'x2', 'x3'},
@@ -38,8 +37,6 @@ class Test_IC_Algorithm(TestAPI):
 
     def tearDown(self):
         pass
-
-
 
     def test_build_g(self):
         self.ic._build_graph(self.variable_types)
@@ -86,7 +83,6 @@ class Test_IC_Algorithm(TestAPI):
     def test_marked_directed_path(self):
         marked_edges = [('a', 'b'), ('b', 'c'), ('c', 'd')]
         unmarked_edges = [('a', 'd')]
-        nodes = ['a', 'b', 'c', 'd']
         g = nx.Graph()
         g.add_edges_from(marked_edges, marked=True)
         g.add_edges_from(unmarked_edges, marked=False)

@@ -1,9 +1,8 @@
 """
-This code is based on work from https://github.com/keiichishima/gsq/tree/master/gsq
-which is released under the GPL v2 License
+This code is based on work from https://github.com/keiichishima/gsqima/pcalg/
+which is released under the GPLv2 License
 """
-
-bin_data = [0,0,1,0,1,
+binary_test_data = [0,0,1,0,1,
 1,0,0,0,0,
 1,1,1,0,1,
 0,0,0,0,0,
@@ -5005,14 +5004,14 @@ bin_data = [0,0,1,0,1,
 0,0,0,0,0,
 ]
 
-bin_answer = [9.95394730483e-256,
+binary_test_answer = [9.95394730483e-256,
               6.9654995846e-250,
               2.70986437702e-244,
               1.66028307209e-137,
               4.5256578439e-134,
 ]
 
-dis_data = [2,0,0,2,1,
+discrete_test_data = [2,0,0,2,1,
 2,1,1,2,1,
 1,0,1,3,0,
 1,0,2,2,1,
@@ -15014,7 +15013,7 @@ dis_data = [2,0,0,2,1,
 2,0,1,2,1,
 ]
 
-dis_answer = [0.355124470003,
+discrete_answer = [0.355124470003,
               1.24045554632e-05,
               0.00571262073676,
               0.775345672281,

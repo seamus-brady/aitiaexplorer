@@ -13,36 +13,29 @@ _logger = logging.getLogger(__name__)
 
 
 class GSquareTest():
+    """
+    Static class for G square independence test used by PC algorithm.
+    """
 
-    def __init__(self, y, x, s, data, **kwargs):
-        """
-        Args:
-            data: the data matrix to be used (as a numpy.ndarray).
-            x: the first node (as an integer).
-            y: the second node (as an integer).
-            s: the set of neighbouring nodes of x and y (as a set()).
-            levels: levels of each column in the data matrix
-                (as a list()).
-        """
-        self.data = data
-        self.x = x
-        self.y = y
-        self.s = s
-        self.kwargs = kwargs
+    def __init__(self):
+       pass
 
-    def ci_test_bin(self):
-        return self._g_square_bin(self.data, self.x, self.y, self.s, self.kwargs)
+    @staticmethod
+    def test_binary(data, x, y, s, **kwargs):
+        return GSquareTest._g_square_binary(data, x, y, s)
 
-    def ci_test_dis(self):
+    @staticmethod
+    def test_discrete(data, x, y, s, **kwargs):
         levels = []
-        if 'levels' in self.kwargs:
-            levels = self.kwargs['levels']
+        if 'levels' in kwargs:
+            levels = kwargs['levels']
         else:
             import numpy as np
-            levels = np.amax(self.data, axis=0) + 1
-        return self._g_square_dis(self.data, self.x, self.y, self.s, levels)
+            levels = np.amax(data, axis=0) + 1
+        return GSquareTest._g_square_discrete(data, x, y, s, levels)
 
-    def _g_square_binary(self, data, x, y, s):
+    @staticmethod
+    def _g_square_binary(data, x, y, s):
         """
         G square test for a binary data.
         Args:
@@ -171,7 +164,8 @@ class GSquareTest():
         _logger.info('p_val = %s' % str(p_val))
         return p_val
 
-    def g_square_discrete(self, data, x, y, s, levels):
+    @staticmethod
+    def _g_square_discrete(data, x, y, s, levels):
         """
         G square test for discrete data.
         Args:
