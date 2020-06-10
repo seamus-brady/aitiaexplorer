@@ -3,7 +3,9 @@ TBD Header
 """
 import logging
 
-from pycausal import prior as p
+import pygraphviz
+from causalgraphicalmodels import CausalGraphicalModel
+from networkx.drawing import nx_agraph
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
@@ -37,11 +39,29 @@ class PyCausalWrapper():
         pc.stop_vm()
         return causal_discovery_algos
 
+    def get_causal_graph_from_dot(self, dot_str):
+        """
+        TBD
+        :param dot_str: dot string
+        :return: CausalGraphicalModel
+        """
+
+        # load graph from dot data
+        nx_graph = nx_agraph.from_agraph(pygraphviz.AGraph(dot_str))
+
+        # create a causal graph
+        causal_graph = CausalGraphicalModel(
+            nodes=nx_graph.nodes(),
+            edges=nx_graph.edges()
+        )
+
+        return causal_graph
+
     # -------------------------------------------------------------------------------------------------
     #                   The methods below return causal discovery algorithms....
     # -------------------------------------------------------------------------------------------------
 
-    def algo_bayes_est(self, df, pc = None):
+    def algo_bayes_est(self, df, pc=None):
         """
         bayesEst is the revised Greedy Equivalence Search (GES) algorithm developed
         by Joseph D. Ramsey, Director of Research Computing, Department of Philosophy,
@@ -68,7 +88,7 @@ class PyCausalWrapper():
             print(str(e))
         return dot_str
 
-    def algo_fges_continuous(self, df, pc = None):
+    def algo_fges_continuous(self, df, pc=None):
         """
         FGES is an optimized and parallelized version of an algorithm developed by Meek [Meek, 1997]
         called the Greedy Equivalence Search (GES). The algorithm was further developed and studied
