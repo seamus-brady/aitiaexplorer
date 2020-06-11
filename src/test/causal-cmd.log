@@ -295,3 +295,32 @@
 2020-06-10 23:24:58 INFO  org.reflections.Reflections:229 - Reflections took 55 ms to scan 1 urls, producing 17 keys and 270 values 
 2020-06-10 23:24:58 INFO  org.reflections.Reflections:229 - Reflections took 8 ms to scan 1 urls, producing 7 keys and 37 values 
 2020-06-10 23:24:58 INFO  org.reflections.Reflections:229 - Reflections took 9 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-11 23:56:01 INFO  org.reflections.Reflections:229 - Reflections took 55 ms to scan 1 urls, producing 17 keys and 270 values 
+2020-06-11 23:56:01 INFO  org.reflections.Reflections:229 - Reflections took 8 ms to scan 1 urls, producing 7 keys and 37 values 
+2020-06-11 23:56:01 INFO  org.reflections.Reflections:229 - Reflections took 9 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-11 23:56:01 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:664 - Invalid number mild on line 2 at column 2.
+java.lang.NumberFormatException: For input string: "mild"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInMixedData(TabularDataFileReader.java:661)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInMixedData(TabularDataFileReader.java:455)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:317)
+	at edu.pitt.dbmi.data.reader.tabular.MixedTabularDatasetFileReader.readInData(MixedTabularDatasetFileReader.java:76)
+	at edu.pitt.dbmi.data.reader.tabular.MixedTabularDatasetFileReader.readInData(MixedTabularDatasetFileReader.java:55)
+2020-06-11 23:56:34 INFO  org.reflections.Reflections:229 - Reflections took 55 ms to scan 1 urls, producing 17 keys and 270 values 
+2020-06-11 23:56:34 INFO  org.reflections.Reflections:229 - Reflections took 7 ms to scan 1 urls, producing 7 keys and 37 values 
+2020-06-11 23:56:35 INFO  org.reflections.Reflections:229 - Reflections took 10 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-11 23:56:35 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:664 - Invalid number mild on line 2 at column 2.
+java.lang.NumberFormatException: For input string: "mild"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInMixedData(TabularDataFileReader.java:661)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInMixedData(TabularDataFileReader.java:455)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:317)
+	at edu.pitt.dbmi.data.reader.tabular.MixedTabularDatasetFileReader.readInData(MixedTabularDatasetFileReader.java:76)
+	at edu.pitt.dbmi.data.reader.tabular.MixedTabularDatasetFileReader.readInData(MixedTabularDatasetFileReader.java:55)
+2020-06-11 23:57:06 INFO  org.reflections.Reflections:229 - Reflections took 64 ms to scan 1 urls, producing 17 keys and 270 values 
+2020-06-11 23:57:06 INFO  org.reflections.Reflections:229 - Reflections took 7 ms to scan 1 urls, producing 7 keys and 37 values 
+2020-06-11 23:57:06 INFO  org.reflections.Reflections:229 - Reflections took 9 ms to scan 1 urls, producing 5 keys and 32 values 

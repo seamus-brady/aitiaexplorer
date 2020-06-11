@@ -47,6 +47,14 @@ class Test_PyCausalWrapper(TestAPI):
         dot_str = self.wrapper.algo_fges_discrete(df)
         self.assertTrue(dot_str is not None, "No graph returned.")
 
+    def test_algo_fges_mixed(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_fges_mixed(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+
+
     def test_multiple_algo_run(self):
         dot_str_list = []
 
