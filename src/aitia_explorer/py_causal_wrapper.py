@@ -10,8 +10,10 @@ from pycausal import search as s
 from pycausal.pycausal import pycausal
 
 from causal_discovery.algorithms.bayes_est_algorithm import BayesEstAlgorithm
+from causal_discovery.algorithms.fci_algorithm import FCIAlgorithm
 from causal_discovery.algorithms.fges_algorithm import FGESAlgorithm
 from causal_discovery.algorithms.gfci_algorithm import GFCIAlgorithm
+from causal_discovery.algorithms.pc_algorithm import PCAlgorithm
 from causal_discovery.algorithms.rfci_algorithm import RFCIAlgorithm
 
 _logger = logging.getLogger(__name__)
@@ -69,6 +71,14 @@ class PyCausalWrapper():
     ############### BayesEst ##################
     def algo_bayes_est(self, df, pc=None):
         return BayesEstAlgorithm.run(df, pc)
+
+    ############### FCI ##################
+    def algo_fci(self, df, pc=None):
+        return FCIAlgorithm.run(df, pc)
+
+    ############### PC ##################
+    def algo_pc(self, df, pc=None):
+        return PCAlgorithm.run(df, pc)
 
     ############### FGES ##################
     def algo_fges_continuous(self, df, pc=None):

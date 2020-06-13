@@ -35,6 +35,20 @@ class Test_PyCausalWrapper(TestAPI):
         dot_str = self.wrapper.algo_bayes_est(df)
         self.assertTrue(dot_str is not None, "No graph returned.")
 
+    ############### FCI ##################
+    def test_fci_bayes_est(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_fci(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    ############### PC ##################
+    def test_pc(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_pc(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
     ############### FGES ##################
     def test_algo_fges_continuous(self):
         data_dir = os.path.join(self.data_dir, "charity.txt")
