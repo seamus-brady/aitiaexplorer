@@ -119,6 +119,14 @@ class Test_PyCausalWrapper(TestAPI):
 
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
+        dot_str_list.append(self.wrapper.algo_fci(df, pc))
+
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str_list.append(self.wrapper.algo_pc(df, pc))
+
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
         dot_str_list.append(self.wrapper.algo_fges_continuous(df, pc))
 
         data_dir = os.path.join(self.data_dir, "audiology.txt")
@@ -127,7 +135,7 @@ class Test_PyCausalWrapper(TestAPI):
 
         pc.stop_vm()
 
-        self.assertTrue(len(dot_str_list) == 3)
+        self.assertTrue(len(dot_str_list) == 5)
 
     def test_dot_graph_load(self):
         # get the graph
