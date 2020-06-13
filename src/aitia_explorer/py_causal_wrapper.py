@@ -6,8 +6,6 @@ import logging
 import pygraphviz
 from causalgraphicalmodels import CausalGraphicalModel
 from networkx.drawing import nx_agraph
-from pycausal import search as s
-from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
 from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
@@ -27,24 +25,20 @@ class PyCausalWrapper():
     def __init__(self):
         pass
 
-    def get_causal_discovery_algos(self):
-        """
-        TBD
-        :return:
-        """
-        # start java vm and get algo runner
-        pc = pycausal()
-        pc.start_vm()
-        tetrad = s.tetradrunner()
-
-        causal_discovery_algos = []
-        algo_dict = tetrad.algos
-        for k, v in algo_dict.items():
-            causal_discovery_algos.append(k)
-
-        # stop java vm
-        pc.stop_vm()
-        return causal_discovery_algos
+    def get_all_algorithms(self):
+        return [self.algo_bayes_est,
+                self.algo_fci,
+                self.algo_pc,
+                self.algo_fges_continuous,
+                self.algo_fges_discrete,
+                self.algo_fges_mixed,
+                self.algo_gfci_continuous,
+                self.algo_gfci_discrete,
+                self.algo_gfci_mixed,
+                self.algo_rfci_continuous,
+                self.algo_rfci_discrete,
+                self.algo_rfci_mixed
+                ]
 
     def get_causal_graph_from_dot(self, dot_str):
         """

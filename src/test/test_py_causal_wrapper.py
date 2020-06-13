@@ -22,12 +22,6 @@ class Test_PyCausalWrapper(TestAPI):
     def tearDown(self):
         pass
 
-    def test_get_algos(self):
-        causal_discovery_algos = []
-        for algo in self.wrapper.get_causal_discovery_algos():
-            causal_discovery_algos.append(algo)
-        self.assertTrue(len(causal_discovery_algos) == 25)
-
     ############### BayesEst ##################
     def test_algo_bayes_est(self):
         data_dir = os.path.join(self.data_dir, "sim_discrete_data_20vars_100cases.txt")
@@ -136,6 +130,17 @@ class Test_PyCausalWrapper(TestAPI):
         pc.stop_vm()
 
         self.assertTrue(len(dot_str_list) == 5)
+
+    def test_run_all_algorithms(self):
+        pc = pycausal()
+        pc.start_vm()
+        dot_str_list = []
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        for algo in self.wrapper.get_all_algorithms():
+            dot_str_list.append(algo(df, pc))
+        pc.stop_vm()
+        self.assertTrue(len(dot_str_list) == 12)
 
     def test_dot_graph_load(self):
         # get the graph
