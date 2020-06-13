@@ -9,12 +9,12 @@ from networkx.drawing import nx_agraph
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
-from causal_discovery.algorithms.bayes_est_algorithm import BayesEstAlgorithm
-from causal_discovery.algorithms.fci_algorithm import FCIAlgorithm
-from causal_discovery.algorithms.fges_algorithm import FGESAlgorithm
-from causal_discovery.algorithms.gfci_algorithm import GFCIAlgorithm
-from causal_discovery.algorithms.pc_algorithm import PCAlgorithm
-from causal_discovery.algorithms.rfci_algorithm import RFCIAlgorithm
+from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
+from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
+from aitia_explorer.algorithms.fges_algorithm import FGESAlgorithm
+from aitia_explorer.algorithms.gfci_algorithm import GFCIAlgorithm
+from aitia_explorer.algorithms.pc_algorithm import PCAlgorithm
+from aitia_explorer.algorithms.rfci_algorithm import RFCIAlgorithm
 
 _logger = logging.getLogger(__name__)
 
