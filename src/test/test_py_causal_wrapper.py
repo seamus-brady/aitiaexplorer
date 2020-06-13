@@ -2,7 +2,6 @@ import os
 
 import pandas as pd
 import pygraphviz
-from causalgraphicalmodels import CausalGraphicalModel
 from networkx.drawing import nx_agraph
 from pycausal import search as s
 from pycausal.pycausal import pycausal
@@ -29,12 +28,14 @@ class Test_PyCausalWrapper(TestAPI):
             causal_discovery_algos.append(algo)
         self.assertTrue(len(causal_discovery_algos) == 25)
 
+    ############### BayesEst ##################
     def test_algo_bayes_est(self):
         data_dir = os.path.join(self.data_dir, "sim_discrete_data_20vars_100cases.txt")
         df = pd.read_table(data_dir, sep="\t")
         dot_str = self.wrapper.algo_bayes_est(df)
         self.assertTrue(dot_str is not None, "No graph returned.")
 
+    ############### FGES ##################
     def test_algo_fges_continuous(self):
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
@@ -53,7 +54,43 @@ class Test_PyCausalWrapper(TestAPI):
         dot_str = self.wrapper.algo_fges_mixed(df)
         self.assertTrue(dot_str is not None, "No graph returned.")
 
+    ############### GFCI ##################
+    def test_algo_gfci_continuous(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_gfci_continuous(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
 
+    def test_algo_gfci_discrete(self):
+        data_dir = os.path.join(self.data_dir, "audiology.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_gfci_discrete(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    def test_algo_gfci_mixed(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_gfci_mixed(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    ############### RFCI ##################
+    def test_algo_rfci_continuous(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_rfci_continuous(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    def test_algo_rfci_discrete(self):
+        data_dir = os.path.join(self.data_dir, "audiology.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_rfci_discrete(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    def test_algo_rfci_mixed(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.wrapper.algo_rfci_mixed(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
 
     def test_multiple_algo_run(self):
         dot_str_list = []
