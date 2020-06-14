@@ -3,10 +3,6 @@ TBD Header
 """
 import logging
 
-import pygraphviz
-from causalgraphicalmodels import CausalGraphicalModel
-from networkx.drawing import nx_agraph
-
 from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
 from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
 from aitia_explorer.algorithms.fges_algorithm import FGESAlgorithm
@@ -19,7 +15,7 @@ _logger = logging.getLogger(__name__)
 
 class PyCausalWrapper():
     """
-    TBD
+    Class that wraps py-causal.
     """
 
     def __init__(self):
@@ -39,24 +35,6 @@ class PyCausalWrapper():
                 self.algo_rfci_discrete,
                 self.algo_rfci_mixed
                 ]
-
-    def get_causal_graph_from_dot(self, dot_str):
-        """
-        TBD
-        :param dot_str: dot string
-        :return: CausalGraphicalModel
-        """
-
-        # load graph from dot data
-        nx_graph = nx_agraph.from_agraph(pygraphviz.AGraph(dot_str))
-
-        # create a causal graph
-        causal_graph = CausalGraphicalModel(
-            nodes=nx_graph.nodes(),
-            edges=nx_graph.edges()
-        )
-
-        return causal_graph
 
     # -------------------------------------------------------------------------------------------------
     #                   The methods below run the causal discovery algorithms
