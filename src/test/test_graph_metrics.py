@@ -24,17 +24,18 @@ class Test_Metrics(TestAPI):
         simulated_data = TargetData.simulated_data_1()
         self.assertTrue(simulated_data is not None, "No simulated data loaded.")
 
-        graph = TargetData.simulated_data_1_graph()
-        self.assertTrue(graph.edges() is not None, "No simulated data loaded.")
-        self.assertTrue(graph.nodes() is not None, "No simulated data loaded.")
+        dot_str = TargetData.simulated_data_1_graph()
+        self.assertTrue(dot_str is not None, "No simulated graph loaded.")
 
     def test_create_known_graph(self):
-        graph = TargetData.simulated_data_1_graph()
+        dot_str = TargetData.simulated_data_1_graph()
+        graph = GraphUtil.get_digraph_from_dot(dot_str)
         self.assertTrue(graph.edges() is not None, "No known simulated graph created.")
         self.assertTrue(graph.nodes() is not None, "No known simulated graph created.")
 
     def test_retrieve_adjacency_matrix(self):
-        graph = TargetData.simulated_data_1_graph()
+        dot_str = TargetData.simulated_data_1_graph()
+        graph = GraphUtil.get_digraph_from_dot(dot_str)
         metrics = GraphMetrics()
         adj_matrix = metrics.retrieve_adjacency_matrix(graph)
         self.assertTrue(adj_matrix is not None, "No adjacency matrix created.")
@@ -46,21 +47,23 @@ class Test_Metrics(TestAPI):
         pred_graph = GraphUtil.get_digraph_from_dot(dot_str)
 
         # get the known data
-        target_graph = TargetData.simulated_data_1_graph()
+        dot_str = TargetData.simulated_data_1_graph()
+        target_graph =  GraphUtil.get_digraph_from_dot(dot_str)
         metrics = GraphMetrics()
         prec_recall = metrics.precision_recall(target_graph, pred_graph)
 
-        self.assertTrue(prec_recall[0] == 0.72)
+        self.assertTrue(prec_recall[0] == 0.41250000000000003)
 
-    def test_precision_recall(self):
+    def test_shd(self):
         # get the simulated data
         simulated_data = TargetData.simulated_data_1()
         dot_str = self.wrapper.algo_pc(simulated_data)
         pred_graph = GraphUtil.get_digraph_from_dot(dot_str)
 
         # get the known data
-        target_graph = TargetData.simulated_data_1_graph()
+        dot_str = TargetData.simulated_data_1_graph()
+        target_graph = GraphUtil.get_digraph_from_dot(dot_str)
         metrics = GraphMetrics()
         shd = metrics.SHD(target_graph, pred_graph)
 
-        self.assertTrue(shd == 14)
+        self.assertTrue(shd == 10)

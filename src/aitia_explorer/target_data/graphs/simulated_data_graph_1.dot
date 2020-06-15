@@ -1,0 +1,12 @@
+digraph g {
+ "X1" -> "X3" [arrowtail=none, arrowhead=normal];
+ "X10" -> "X4" [dir=both, arrowtail=normal, arrowhead=none];
+ "X2" -> "X7" [arrowtail=none, arrowhead=normal];
+ "X2" -> "X9" [arrowtail=none, arrowhead=normal];
+ "X10" -> "X7" [dir=both, arrowtail=normal, arrowhead=none];
+ "X2" -> "X8" [arrowtail=none, arrowhead=normal];
+ "X1" -> "X10" [arrowtail=none, arrowhead=normal];
+ "X4" -> "X8" [arrowtail=none, arrowhead=normal];
+ "X3" -> "X8" [arrowtail=none, arrowhead=normal];
+ "X2" -> "X3" [arrowtail=none, arrowhead=normal];
+}
