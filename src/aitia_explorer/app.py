@@ -59,9 +59,14 @@ class App():
 
             analysis_results.append(single_result)
 
-
         # shutdown the java vm if needed
         if not pc_supplied:
             pc.stop_vm()
 
-        return analysis_results
+        # filter the results
+        analysis_results_filtered = analysis_results.copy()
+        for result in analysis_results:
+            if result['causal_graph'] is None:
+                analysis_results_filtered.remove(result)
+
+        return analysis_results_filtered
