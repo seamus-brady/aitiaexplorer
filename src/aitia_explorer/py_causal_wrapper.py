@@ -13,27 +13,31 @@ from aitia_explorer.algorithms.rfci_algorithm import RFCIAlgorithm
 _logger = logging.getLogger(__name__)
 
 
-class PyCausalWrapper():
+class PyCausalUtil(object):
+    pass
+
+
+class PyCausalUtil():
     """
-    Class that wraps py-causal.
+    Class that provides utility functions for py-causal.
     """
 
     def __init__(self):
         pass
 
     def get_all_algorithms(self):
-        return [self.algo_bayes_est,
-                self.algo_fci,
-                self.algo_pc,
-                self.algo_fges_continuous,
-                self.algo_fges_discrete,
-                self.algo_fges_mixed,
-                self.algo_gfci_continuous,
-                self.algo_gfci_discrete,
-                self.algo_gfci_mixed,
-                self.algo_rfci_continuous,
-                self.algo_rfci_discrete,
-                self.algo_rfci_mixed
+        return [('BayesEst', self.algo_bayes_est),
+                ('FCI', self.algo_fci),
+                ('PC', self.algo_pc),
+                ('FGES-continuous', self.algo_fges_continuous),
+                ('FGES-discrete', self.algo_fges_discrete),
+                ('FGES-mixed-data', self.algo_fges_mixed),
+                ('GFCI-continuous', self.algo_gfci_continuous),
+                ('GFCI-discrete', self.algo_gfci_discrete),
+                ('GFCI-mixed-data', self.algo_gfci_mixed),
+                ('RFCI-continuous', self.algo_rfci_continuous),
+                ('RFCI-discrete', self.algo_rfci_discrete),
+                ('RFCI-mixed-data', self.algo_rfci_mixed)
                 ]
 
     # -------------------------------------------------------------------------------------------------

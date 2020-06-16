@@ -3,7 +3,7 @@ import os
 from tests.unit import TestAPI
 
 from aitia_explorer.metrics.graph_metrics import GraphMetrics
-from aitia_explorer.py_causal_wrapper import PyCausalWrapper
+from aitia_explorer.py_causal_wrapper import PyCausalUtil
 from aitia_explorer.util.graph_util import GraphUtil
 from aitia_explorer.target_data.loader import TargetData
 
@@ -12,7 +12,7 @@ class Test_Metrics(TestAPI):
     """
     Tests for graph metrics.
     """
-    wrapper = PyCausalWrapper()
+    pc_util = PyCausalUtil()
 
     def setUp(self):
         self.data_dir = os.path.join(os.path.dirname(__file__), 'resources/data')
@@ -43,7 +43,7 @@ class Test_Metrics(TestAPI):
     def test_precision_recall(self):
         # get the simulated data
         simulated_data = TargetData.simulated_data_1()
-        dot_str = self.wrapper.algo_pc(simulated_data)
+        dot_str = self.pc_util.algo_pc(simulated_data)
         pred_graph = GraphUtil.get_digraph_from_dot(dot_str)
 
         # get the known data
@@ -57,7 +57,7 @@ class Test_Metrics(TestAPI):
     def test_shd(self):
         # get the simulated data
         simulated_data = TargetData.simulated_data_1()
-        dot_str = self.wrapper.algo_pc(simulated_data)
+        dot_str = self.pc_util.algo_pc(simulated_data)
         pred_graph = GraphUtil.get_digraph_from_dot(dot_str)
 
         # get the known data

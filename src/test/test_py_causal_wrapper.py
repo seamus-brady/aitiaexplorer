@@ -7,14 +7,14 @@ from pycausal import search as s
 from pycausal.pycausal import pycausal
 from tests.unit import TestAPI
 
-from aitia_explorer.py_causal_wrapper import PyCausalWrapper
+from aitia_explorer.py_causal_wrapper import PyCausalUtil
 
 
 class Test_PyCausalWrapper(TestAPI):
     """
     Tests for the pycausal wrapper starting and stopping the Java VM.
     """
-    wrapper = PyCausalWrapper()
+    pc_util = PyCausalUtil()
 
     def setUp(self):
         self.data_dir = os.path.join(os.path.dirname(__file__), 'resources/data')
@@ -31,23 +31,23 @@ class Test_PyCausalWrapper(TestAPI):
 
         data_dir = os.path.join(self.data_dir, "sim_discrete_data_20vars_100cases.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str_list.append(self.wrapper.algo_bayes_est(df, pc))
+        dot_str_list.append(self.pc_util.algo_bayes_est(df, pc))
 
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str_list.append(self.wrapper.algo_fci(df, pc))
+        dot_str_list.append(self.pc_util.algo_fci(df, pc))
 
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str_list.append(self.wrapper.algo_pc(df, pc))
+        dot_str_list.append(self.pc_util.algo_pc(df, pc))
 
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str_list.append(self.wrapper.algo_fges_continuous(df, pc))
+        dot_str_list.append(self.pc_util.algo_fges_continuous(df, pc))
 
         data_dir = os.path.join(self.data_dir, "audiology.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str_list.append(self.wrapper.algo_fges_discrete(df, pc))
+        dot_str_list.append(self.pc_util.algo_fges_discrete(df, pc))
 
         pc.stop_vm()
 
@@ -59,7 +59,8 @@ class Test_PyCausalWrapper(TestAPI):
         dot_str_list = []
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        for algo in self.wrapper.get_all_algorithms():
+        for algo in self.pc_util.get_all_algorithms():
+            algo = algo[1] # just need the func
             dot_str_list.append(algo(df, pc))
         pc.stop_vm()
         self.assertTrue(len(dot_str_list) == 12)
@@ -68,7 +69,7 @@ class Test_PyCausalWrapper(TestAPI):
         # get the graph
         data_dir = os.path.join(self.data_dir, "audiology.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str = self.wrapper.algo_fges_discrete(df)
+        dot_str = self.pc_util.algo_fges_discrete(df)
 
         graph = nx_agraph.from_agraph(pygraphviz.AGraph(dot_str))
         self.assertTrue(graph is not None, "Nx did not load graph data.")
@@ -78,8 +79,8 @@ class Test_PyCausalWrapper(TestAPI):
         # get the graph
         data_dir = os.path.join(self.data_dir, "audiology.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str = self.wrapper.algo_fges_discrete(df)
+        dot_str = self.pc_util.algo_fges_discrete(df)
 
-        causal_graph = self.wrapper.get_causal_graph_from_dot(dot_str)
+        causal_graph = self.pc_util.get_causal_graph_from_dot(dot_str)
 
         self.assertTrue(causal_graph is not None, "CausalGraphicalModel did not load graph data.")
