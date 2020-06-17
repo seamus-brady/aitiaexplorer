@@ -6,6 +6,8 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -24,9 +26,6 @@ class GFCIAlgorithm():
     augmented by the orientation phase of FCI to provide additional orientations.
     """
 
-    # keeping these constants here to keep class self contained
-    MIXED = 'mixed'
-    DISCRETE = 'discrete'
 
     def __init__(self):
         pass
@@ -56,7 +55,7 @@ class GFCIAlgorithm():
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
                        faithfulnessAssumed=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -89,12 +88,12 @@ class GFCIAlgorithm():
                        dfs=df,
                        testId='bdeu-test',
                        scoreId='bdeu-score',
-                       dataType=GFCIAlgorithm.DISCRETE,
+                       dataType=AlgorithmConstants.DISCRETE,
                        maxDegree=3,
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
                        faithfulnessAssumed=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -127,13 +126,13 @@ class GFCIAlgorithm():
                        dfs=df,
                        testId='cg-lr-test',
                        scoreId='cg-bic-score',
-                       dataType=GFCIAlgorithm.MIXED,
+                       dataType=AlgorithmConstants.MIXED,
                        numCategoriesToDiscretize=4,
                        maxDegree=3,
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
                        faithfulnessAssumed=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 

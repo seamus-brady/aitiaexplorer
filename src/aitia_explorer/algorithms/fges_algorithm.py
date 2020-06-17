@@ -6,6 +6,8 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -25,10 +27,6 @@ class FGESAlgorithm():
     (using the BDeu score) or a mixture of continuous and discrete data
     (using the Conditional Gaussian score); these are all decomposable scores.
     """
-
-    # keeping these constants here to keep class self contained
-    MIXED = 'mixed'
-    DISCRETE = 'discrete'
 
     def __init__(self):
         pass
@@ -54,7 +52,7 @@ class FGESAlgorithm():
                        dfs=df,
                        maxDegree=-1,
                        faithfulnessAssumed=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -86,11 +84,11 @@ class FGESAlgorithm():
             tetrad.run(algoId='fges',
                        dfs=df,
                        scoreId='bdeu-score',
-                       dataType=FGESAlgorithm.DISCRETE,
+                       dataType=AlgorithmConstants.DISCRETE,
                        maxDegree=3,
                        faithfulnessAssumed=True,
                        symmetricFirstStep=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -122,12 +120,12 @@ class FGESAlgorithm():
             tetrad.run(algoId='fges',
                        dfs=df,
                        scoreId='cg-bic-score',
-                       dataType=FGESAlgorithm.MIXED,
+                       dataType=AlgorithmConstants.MIXED,
                        numCategoriesToDiscretize=4,
                        maxDegree=3,
                        faithfulnessAssumed=True,
                        symmetricFirstStep=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 

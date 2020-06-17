@@ -5,6 +5,8 @@ import logging
 from pycausal.pycausal import pycausal
 from pycausal import search as s
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -32,7 +34,7 @@ class BayesEstAlgorithm():
                 pc = pycausal()
                 pc.start_vm()
 
-            bayes_est = s.bayesEst(df, depth=-1, alpha=0.05, verbose=True)
+            bayes_est = s.bayesEst(df, depth=-1, alpha=0.05, verbose=AlgorithmConstants.VERBOSE)
             graph = bayes_est.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 

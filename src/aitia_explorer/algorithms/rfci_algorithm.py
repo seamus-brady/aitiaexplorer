@@ -6,6 +6,8 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -15,10 +17,6 @@ class RFCIAlgorithm():
     output is somewhat differently interpreted. In most cases this runs faster than FCI
     (which can be slow in some steps) and is almost as informative. See Colombo et al., 2012.
     """
-
-    # keeping these constants here to keep class self contained
-    MIXED = 'mixed'
-    DISCRETE = 'discrete'
 
     def __init__(self):
         pass
@@ -46,7 +44,7 @@ class RFCIAlgorithm():
                        depth=-1,
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -78,11 +76,11 @@ class RFCIAlgorithm():
             tetrad.run(algoId='rfci',
                        dfs=df,
                        testId='chi-square-test',
-                       dataType=RFCIAlgorithm.DISCRETE,
+                       dataType=AlgorithmConstants.DISCRETE,
                        depth=3,
                        maxPathLength=-1,
                        completeRuleSetUsed=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
@@ -114,13 +112,13 @@ class RFCIAlgorithm():
             tetrad.run(algoId='rfci',
                        dfs=df,
                        testId='cg-lr-test',
-                       dataType=RFCIAlgorithm.MIXED,
+                       dataType=AlgorithmConstants.MIXED,
                        numCategoriesToDiscretize=4,
                        depth=-1,
                        maxPathLength=-1,
                        discretize=False,
                        completeRuleSetUsed=False,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 

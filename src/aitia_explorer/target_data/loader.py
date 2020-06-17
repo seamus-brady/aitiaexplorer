@@ -38,3 +38,31 @@ class TargetData:
         data_dir = os.path.join(TargetData.data_dir(), "simulated_data_1.txt")
         simulated_data = pd.read_table(data_dir, sep="\t")
         return simulated_data
+
+    @staticmethod
+    def audiology_data():
+        data_dir = os.path.join(TargetData.data_dir(), "audiology.txt")
+        return pd.read_table(data_dir, sep="\t")
+
+    @staticmethod
+    def charity_data():
+        data_dir = os.path.join(TargetData.data_dir(), "charity.txt")
+        return pd.read_table(data_dir, sep="\t")
+
+    @staticmethod
+    def lucas0_data():
+        """
+        See http://www.causality.inf.ethz.ch/data/LUCAS.html
+        :return:
+        """
+        data_dir = os.path.join(TargetData.data_dir(), "lucas0_train.csv")
+        return pd.read_csv(data_dir)
+
+    @staticmethod
+    def lucas2_data():
+        """
+        See http://www.causality.inf.ethz.ch/data/LUCAS.html
+        :return:
+        """
+        data_dir = os.path.join(TargetData.data_dir(), "lucas0_train.csv")
+        return pd.read_csv(data_dir)

@@ -6,6 +6,8 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -70,7 +72,7 @@ class PCAlgorithm():
                        conflictRule=1,
                        concurrentFAS=True,
                        useMaxPOrientationHeuristic=True,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 

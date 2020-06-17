@@ -6,6 +6,8 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
+from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+
 _logger = logging.getLogger(__name__)
 
 
@@ -57,7 +59,7 @@ class FCIAlgorithm():
                        depth=-1,
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
-                       verbose=True)
+                       verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
 
