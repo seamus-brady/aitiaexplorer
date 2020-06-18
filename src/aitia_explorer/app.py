@@ -2,6 +2,7 @@
 TBD Header
 """
 import logging
+
 import networkx as nx
 import pandas as pd
 from pycausal.pycausal import pycausal
@@ -20,7 +21,7 @@ class App():
     pc_util = PyCausalUtil()
 
     def __init__(self):
-        pass
+        self.vm_running = False
 
     def run_analysis(self, df, target_graph_str=None, pc=None):
         """
@@ -72,7 +73,23 @@ class App():
             if result['causal_graph'] is None:
                 analysis_results_filtered.remove(result)
 
-        df_results = pd.DataFrame(columns=('Algorithm', 'Ind Relations Diff', 'Isomorphic to Target?', 'AURC', 'SHD'))
+        df_results = self.get_result_dataframe(analysis_results_filtered, target_graph_str)
+
+        return analysis_results_filtered, df_results
+
+    def get_result_dataframe(self, analysis_results_filtered, target_graph_str):
+        """
+        Provides a dataframe with the analysis results.
+        :param analysis_results_filtered:
+        :param target_graph_str:
+        :return:
+        """
+        df_results = pd.DataFrame(
+            columns=('Algorithm',
+                     'Ind Relations Diff',
+                     'Isomorphic to Target?',
+                     'AURC',
+                     'SHD'))
         metrics = GraphMetrics()
         target_nxgraph = None
         if target_graph_str is not None:
@@ -85,21 +102,20 @@ class App():
             if result['dot_str'] is not None and result['causal_graph'] is not None:
                 pred_graph = GraphUtil.get_nxgraph_from_dot(result['dot_str'])
                 if target_nxgraph is not None:
-                    prec_recall = metrics.precision_recall(target_nxgraph, pred_graph)
+                    prec_recall = metrics.precision_recall(target_nxgraph, pred_graph)[0]
                     shd = metrics.SHD(target_nxgraph, pred_graph)
                     isomorphic = nx.is_isomorphic(target_nxgraph, pred_graph)
                     ind_rel_diff = target_ind_rels - result['num_ind_rel']
                 else:
                     ind_rel_diff = result['num_ind_rel']
-                    prec_recall = 'NA'
-                    shd = 'NA'
+                    prec_recall = 0
+                    shd = 0
                     isomorphic = 'NA'
                 new_row = {'Algorithm': result['algo_name'],
                            'Ind Relations Diff': ind_rel_diff,
                            'Isomorphic to Target?': isomorphic,
-                           'AURC': prec_recall[0],
+                           'AURC': prec_recall,
                            'SHD': shd
-                          }
+                           }
                 df_results = df_results.append(new_row, ignore_index=True)
-
-        return analysis_results_filtered, df_results
+        return df_results
