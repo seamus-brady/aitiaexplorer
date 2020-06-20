@@ -3,14 +3,14 @@ import os
 import pandas as pd
 from tests.unit import TestAPI
 
-from aitia_explorer.py_causal_wrapper import PyCausalUtil
+from aitia_explorer.algorithm_runner import AlgorithmRunner
 
 
 class Test_Algorithms(TestAPI):
     """
     Tests for individual algorithms.
     """
-    pc_util = PyCausalUtil()
+    pc_util = AlgorithmRunner()
 
 
     def setUp(self):

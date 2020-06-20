@@ -3,7 +3,7 @@ import os
 from tests.unit import TestAPI
 
 from aitia_explorer.metrics.graph_metrics import GraphMetrics
-from aitia_explorer.py_causal_wrapper import PyCausalUtil
+from aitia_explorer.algorithm_runner import AlgorithmRunner
 from aitia_explorer.util.graph_util import GraphUtil
 from aitia_explorer.target_data.loader import TargetData
 
@@ -12,7 +12,7 @@ class Test_Metrics(TestAPI):
     """
     Tests for graph metrics.
     """
-    pc_util = PyCausalUtil()
+    pc_util = AlgorithmRunner()
 
     def setUp(self):
         self.data_dir = os.path.join(os.path.dirname(__file__), 'resources/data')

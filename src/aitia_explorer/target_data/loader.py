@@ -4,13 +4,16 @@ TBD
 import logging
 import os
 import pandas as pd
+import numpy as np
+from causalgraphicalmodels import StructuralCausalModel
+from causalgraphicalmodels.csm import logistic_model, linear_model
 
 _logger = logging.getLogger(__name__)
 
 
 class TargetData:
     """
-    A class that provides known causal data for targetting in tests.
+    A class that provides known causal data for targeting in tests.
     """
 
     def __init__(self):
@@ -66,3 +69,22 @@ class TargetData:
         """
         data_dir = os.path.join(TargetData.data_dir(), "lucas0_train.csv")
         return pd.read_csv(data_dir)
+
+    @staticmethod
+    def scm1():
+        """
+        Returns a StructuralCausalModel for sampling
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return:
+        """
+        return StructuralCausalModel({
+            "a": lambda n_samples: np.random.normal(size=n_samples),
+            "b": lambda n_samples: np.random.normal(size=n_samples),
+            "x": logistic_model(["a", "b"], [-1, 1]),
+            "c": linear_model(["x"], [1]),
+            "y": linear_model(["c", "e"], [3, -1]),
+            "d": linear_model(["b"], [-1]),
+            "e": linear_model(["d"], [2]),
+            "f": linear_model(["y"], [0.7]),
+            "h": linear_model(["y", "a"], [1.3, 2.1])
+        })

@@ -7,14 +7,14 @@ from pycausal import search as s
 from pycausal.pycausal import pycausal
 from tests.unit import TestAPI
 
-from aitia_explorer.py_causal_wrapper import PyCausalUtil
+from aitia_explorer.algorithm_runner import AlgorithmRunner
 
 
 class Test_PyCausalWrapper(TestAPI):
     """
     Tests for the pycausal wrapper starting and stopping the Java VM.
     """
-    pc_util = PyCausalUtil()
+    pc_util = AlgorithmRunner()
 
     def setUp(self):
         self.data_dir = os.path.join(os.path.dirname(__file__), 'resources/data')
