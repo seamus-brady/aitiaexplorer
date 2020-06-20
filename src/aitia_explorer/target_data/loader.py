@@ -88,3 +88,45 @@ class TargetData:
             "f": linear_model(["y"], [0.7]),
             "h": linear_model(["y", "a"], [1.3, 2.1])
         })
+
+    @staticmethod
+    def scm2():
+        """
+        Returns a StructuralCausalModel for sampling
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return:
+        """
+        return StructuralCausalModel({
+            "a": lambda n_samples: np.random.normal(size=n_samples),
+            "b": lambda n_samples: np.random.normal(size=n_samples),
+            "c": logistic_model(["a", "b"], [-1, 1]),
+            "d": logistic_model(["c", "b"], [-1, 1]),
+            "e": lambda n_samples: np.random.normal(size=n_samples),
+            "f": lambda n_samples: np.random.normal(size=n_samples),
+            "g": linear_model(["f"], [0.7]),
+            "h": linear_model(["f"], [0.9]),
+        })
+
+    @staticmethod
+    def scm3():
+        """
+        Returns a StructuralCausalModel for sampling
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return:
+        """
+        return StructuralCausalModel({
+            "a": lambda n_samples: np.random.normal(size=n_samples),
+            "b": lambda n_samples: np.random.normal(size=n_samples),
+            "c": lambda n_samples: np.random.normal(size=n_samples),
+            "d": lambda n_samples: np.random.normal(size=n_samples),
+            "e": lambda n_samples: np.random.normal(size=n_samples),
+            "f": logistic_model(["c", "b"], [-1, 1]),
+            "g": linear_model(["f", "d"], [0.5, 1.1]),
+            "h": linear_model(["g", "d"], [0.5, 1.1]),
+            "i": logistic_model(["a", "b"], [-1, 1]),
+            "j": logistic_model(["c", "b"], [-1, 1]),
+            "k": lambda n_samples: np.random.normal(size=n_samples),
+            "l": lambda n_samples: np.random.normal(size=n_samples),
+            "m": linear_model(["k", "l"], [0.8, 1.2]),
+            "n": logistic_model(["m", "b"], [-1, 1]),
+        })
