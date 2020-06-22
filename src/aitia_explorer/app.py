@@ -93,7 +93,6 @@ class App():
         """
         df_results = pd.DataFrame(
             columns=('Algorithm',
-                     'Isomorphic to Target?',
                      'AURC',
                      'SHD'))
 
@@ -107,13 +106,10 @@ class App():
                 if target_nxgraph is not None:
                     prec_recall = self.graph_metrics.precision_recall(target_nxgraph, pred_graph)[0]
                     shd = self.graph_metrics.SHD(target_nxgraph, pred_graph)
-                    isomorphic = nx.is_isomorphic(target_nxgraph, pred_graph)
                 else:
                     prec_recall = 0
                     shd = 0
-                    isomorphic = 'NA'
                 new_row = {'Algorithm': result['algo_name'],
-                           'Isomorphic to Target?': isomorphic,
                            'AURC': prec_recall,
                            'SHD': shd
                            }

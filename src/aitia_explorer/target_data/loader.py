@@ -130,3 +130,27 @@ class TargetData:
             "m": linear_model(["k", "l"], [0.8, 1.2]),
             "n": logistic_model(["m", "b"], [-1, 1]),
         })
+
+    @staticmethod
+    def virus_scm():
+        """
+        Returns a StructuralCausalModel for sampling
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return:
+        """
+        return StructuralCausalModel({
+            "age": lambda n_samples: np.random.normal(size=n_samples),
+            "bmi": lambda n_samples: np.random.normal(size=n_samples),
+            "gene_1": lambda n_samples: np.random.normal(size=n_samples),
+            "gene_2": lambda n_samples: np.random.normal(size=n_samples),
+            "gene_3": lambda n_samples: np.random.normal(size=n_samples),
+            "gene_4": linear_model(["age", "gene_2"], [-1, 0.8]),
+            "gene_5": linear_model(["gene_4", "gene_1"], [0.5, 1.5]),
+            "gene_6": linear_model(["gene_1", "gene_5"], [0.5, 1.1]),
+            "gene_7": linear_model(["gene_6", "gene_5"], [-1, 0.75]),
+            "blood_pressure": lambda n_samples: np.random.normal(size=n_samples),
+            "smoking": lambda n_samples: np.random.normal(size=n_samples),
+            "heart_health": linear_model(["blood_pressure", "age"], [0.8, 1.2]),
+            "white_cell_count": linear_model(["gene_1", "bmi"], [-1, 1]),
+            "serious_viral_illness": linear_model(["gene_3", "heart_health", "white_cell_count"], [-1, 0.2, 1]),
+        })
