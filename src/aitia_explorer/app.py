@@ -93,7 +93,7 @@ class App():
         """
         df_results = pd.DataFrame(
             columns=('Algorithm',
-                     'AURC',
+                     'AUPR',
                      'SHD'))
 
         target_nxgraph = None
@@ -110,7 +110,7 @@ class App():
                     prec_recall = 0
                     shd = 0
                 new_row = {'Algorithm': result['algo_name'],
-                           'AURC': prec_recall,
+                           'AUPR': prec_recall,
                            'SHD': shd
                            }
                 df_results = df_results.append(new_row, ignore_index=True)

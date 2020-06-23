@@ -7,3 +7,6 @@
 2020-06-22 22:48:34 INFO  org.reflections.Reflections:229 - Reflections took 56 ms to scan 1 urls, producing 17 keys and 270 values 
 2020-06-22 22:48:35 INFO  org.reflections.Reflections:229 - Reflections took 8 ms to scan 1 urls, producing 7 keys and 37 values 
 2020-06-22 22:48:35 INFO  org.reflections.Reflections:229 - Reflections took 8 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-23 14:42:59 INFO  org.reflections.Reflections:229 - Reflections took 55 ms to scan 1 urls, producing 17 keys and 270 values 
+2020-06-23 14:42:59 INFO  org.reflections.Reflections:229 - Reflections took 46 ms to scan 1 urls, producing 7 keys and 37 values 
+2020-06-23 14:43:00 INFO  org.reflections.Reflections:229 - Reflections took 42 ms to scan 1 urls, producing 5 keys and 32 values 
