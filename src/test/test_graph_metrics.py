@@ -20,19 +20,6 @@ class Test_Metrics(TestAPI):
     def tearDown(self):
         pass
 
-    def test_load_simulated_data_graph(self):
-        simulated_data = TargetData.simulated_data_1()
-        self.assertTrue(simulated_data is not None, "No simulated data loaded.")
-
-        dot_str = TargetData.simulated_data_1_graph()
-        self.assertTrue(dot_str is not None, "No simulated graph loaded.")
-
-    def test_create_known_graph(self):
-        dot_str = TargetData.simulated_data_1_graph()
-        graph = GraphUtil.get_digraph_from_dot(dot_str)
-        self.assertTrue(graph.edges() is not None, "No known simulated graph created.")
-        self.assertTrue(graph.nodes() is not None, "No known simulated graph created.")
-
     def test_retrieve_adjacency_matrix(self):
         dot_str = TargetData.simulated_data_1_graph()
         graph = GraphUtil.get_digraph_from_dot(dot_str)

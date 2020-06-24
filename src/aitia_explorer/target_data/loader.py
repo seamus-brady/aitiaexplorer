@@ -5,6 +5,7 @@ import logging
 import os
 import pandas as pd
 import numpy as np
+import random
 from causalgraphicalmodels import StructuralCausalModel
 from causalgraphicalmodels.csm import logistic_model, linear_model
 
@@ -154,3 +155,13 @@ class TargetData:
             "white_cell_count": linear_model(["gene_1", "bmi"], [-1, 1]),
             "serious_viral_illness": linear_model(["gene_3", "heart_health", "white_cell_count"], [-1, 0.2, 1]),
         })
+
+    @staticmethod
+    def random_scm(upper=20):
+        """
+        Generates a random SCM.
+        :return:
+        """
+        feature_list = []
+        for n in np.arange(0, upper):
+            feature_list.append("X" + n)
