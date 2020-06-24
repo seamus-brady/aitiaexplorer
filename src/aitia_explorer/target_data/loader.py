@@ -3,9 +3,10 @@ TBD
 """
 import logging
 import os
-import pandas as pd
-import numpy as np
 import random
+
+import numpy as np
+import pandas as pd
 from causalgraphicalmodels import StructuralCausalModel
 from causalgraphicalmodels.csm import logistic_model, linear_model
 
@@ -157,59 +158,71 @@ class TargetData:
         })
 
     @staticmethod
-    def random_scm(upper=20):
+    def random_scm1():
         """
         Generates a random SCM.
         :return:
         """
-        # create a set of feature vars
-        features = []
-        for n in np.arange(0, upper):
-            features.append('X' + str(n))
-
-        # now set a value for each feature
-        scm_contents = dict()
-        normal_feature_num = upper - random.randint(1, upper)
-
-        # normally distributed features
-        for n in np.arange(0, normal_feature_num):
-            scm_contents[features.pop()] = lambda n_samples: np.random.normal(size=n_samples)
-
-        # conditional features
-        edges = []
-        for n in np.arange(0, upper - normal_feature_num):
-            feature = features.pop()
-            choice = random.randint(0, 1)
-            if choice == 0:
-                f0 = TargetData.get_random_int(n, n1=None, upper=(upper - normal_feature_num))
-                suggested_edge = feature + 'X' + str(f0)
-                if suggested_edge not in edges:
-                    scm_contents[feature] = linear_model(['X' + str(f0)],
-                                                                [random.uniform(0, 1)])
-                    edges.append(suggested_edge)
-            if choice == 1:
-                f0 = TargetData.get_random_int(n, n1=None, upper=(upper - normal_feature_num))
-                f1 = TargetData.get_random_int(n, f0, upper=(upper - normal_feature_num))
-                suggested_edge = feature + 'X' + str(f0) + 'X' + str(f1)
-                if suggested_edge not in edges:
-                    scm_contents[feature] = linear_model(['X' + str(f0), 'X' + str(f1)],
-                                                                [random.uniform(0, 1), random.uniform(0, 1)])
-                    edges.append(suggested_edge)
-        return StructuralCausalModel(scm_contents)
+        return StructuralCausalModel({
+            'X1': linear_model(['X20', 'X8'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X2': lambda n_samples: np.random.normal(size=n_samples),
+            'X3': lambda n_samples: np.random.normal(size=n_samples),
+            'X4': linear_model(['X14'], [random.uniform(0, 1)]),
+            'X5': lambda n_samples: np.random.normal(size=n_samples),
+            'X6': lambda n_samples: np.random.normal(size=n_samples),
+            'X7': linear_model(['X12', 'X9'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X8': lambda n_samples: np.random.normal(size=n_samples),
+            'X9': lambda n_samples: np.random.normal(size=n_samples),
+            'X10': lambda n_samples: np.random.normal(size=n_samples),
+            'X11': linear_model(['X1', 'X5'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X12': linear_model(['X5', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X13': linear_model(['X9'], [random.uniform(0, 1)]),
+            'X14': linear_model(['X8'], [random.uniform(0, 1)]),
+            'X15': linear_model(['X14'], [random.uniform(0, 1)]),
+            'X16': linear_model(['X15', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X17': linear_model(['X10', 'X11'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X18': linear_model(['X12', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X19': linear_model(['X3'], [random.uniform(0, 1)]),
+            'X20': linear_model(['X19', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)])
+        })
 
     @staticmethod
-    def get_random_int(n0, n1=None, upper=None):
+    def random_scm2():
         """
-        Gets any random int, except for the n0, n1 passed in.
-        :param n:
-        :param upper:
+        Generates a random SCM.
         :return:
         """
-        random_int = None
-        if n1 is None:
-            while random_int is None or random_int == n0:
-                random_int = random.randint(0, upper)
-        else:
-            while random_int is None or random_int == n0 or random_int == n1:
-                random_int = random.randint(0, upper)
-        return random_int
+        return StructuralCausalModel({
+            'X1': lambda n_samples: np.random.normal(size=n_samples),
+            'X2': lambda n_samples: np.random.normal(size=n_samples),
+            'X3': linear_model(['X24'], [random.uniform(0, 1)]),
+            'X4': lambda n_samples: np.random.normal(size=n_samples),
+            'X5': lambda n_samples: np.random.normal(size=n_samples),
+            'X6': lambda n_samples: np.random.normal(size=n_samples),
+            'X7': lambda n_samples: np.random.normal(size=n_samples),
+            'X8': lambda n_samples: np.random.normal(size=n_samples),
+            'X9': lambda n_samples: np.random.normal(size=n_samples),
+            'X10': lambda n_samples: np.random.normal(size=n_samples),
+            'X11': linear_model(['X1', 'X5'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X12': linear_model(['X5', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X13': linear_model(['X9','X1'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X14': linear_model(['X8'], [random.uniform(0, 1)]),
+            'X15': linear_model(['X14', 'X4', 'X27'],
+                                [random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)]),
+            'X16': linear_model(['X15', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X17': linear_model(['X10', 'X11'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X18': linear_model(['X12', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X19': linear_model(['X3'], [random.uniform(0, 1)]),
+            'X20': linear_model(['X19', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X21': linear_model(['X8'], [random.uniform(0, 1)]),
+            'X22': lambda n_samples: np.random.normal(size=n_samples),
+            'X23': linear_model(['X18'], [random.uniform(0, 1)]),
+            'X24': linear_model(['X21', 'X22', 'X25'],
+                                [random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)]),
+            'X25': lambda n_samples: np.random.normal(size=n_samples),
+            'X26': linear_model(['X14', 'X18'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X27': lambda n_samples: np.random.normal(size=n_samples),
+            'X28': linear_model(['X7', 'X26'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X29': linear_model(['X30', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X30': lambda n_samples: np.random.normal(size=n_samples),
+        })
