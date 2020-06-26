@@ -204,7 +204,7 @@ class TargetData:
             'X9': lambda n_samples: np.random.normal(size=n_samples),
             'X10': lambda n_samples: np.random.normal(size=n_samples),
             'X11': linear_model(['X1', 'X5'], [random.uniform(0, 1), random.uniform(0, 1)]),
-            'X12': linear_model(['X5', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X12': logistic_model(['X5', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
             'X13': linear_model(['X9','X1'], [random.uniform(0, 1), random.uniform(0, 1)]),
             'X14': linear_model(['X8'], [random.uniform(0, 1)]),
             'X15': linear_model(['X14', 'X4', 'X27'],
@@ -212,6 +212,48 @@ class TargetData:
             'X16': linear_model(['X15', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
             'X17': linear_model(['X10', 'X11'], [random.uniform(0, 1), random.uniform(0, 1)]),
             'X18': linear_model(['X12', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X19': linear_model(['X3'], [random.uniform(0, 1)]),
+            'X20': linear_model(['X19', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X21': linear_model(['X8'], [random.uniform(0, 1)]),
+            'X22': lambda n_samples: np.random.normal(size=n_samples),
+            'X23': linear_model(['X18'], [random.uniform(0, 1)]),
+            'X24': linear_model(['X21', 'X22', 'X25'],
+                                [random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)]),
+            'X25': lambda n_samples: np.random.normal(size=n_samples),
+            'X26': linear_model(['X14', 'X18'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X27': lambda n_samples: np.random.normal(size=n_samples),
+            'X28': linear_model(['X7', 'X26'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X29': linear_model(['X30', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X30': lambda n_samples: np.random.normal(size=n_samples),
+        })
+
+
+    @staticmethod
+    def random_scm_treatment_outcome():
+        """
+        Generates a random SCM with treatment and outcome.
+        :return:
+        """
+        return StructuralCausalModel({
+            'X1': lambda n_samples: np.random.normal(size=n_samples),
+            'X2': lambda n_samples: np.random.normal(size=n_samples),
+            'X3': linear_model(['X24'], [random.uniform(0, 1)]),
+            'X4': lambda n_samples: np.random.normal(size=n_samples),
+            'X5': lambda n_samples: np.random.normal(size=n_samples),
+            'X6': lambda n_samples: np.random.normal(size=n_samples),
+            'X7': lambda n_samples: np.random.normal(size=n_samples),
+            'X8': lambda n_samples: np.random.normal(size=n_samples),
+            'X9': lambda n_samples: np.random.normal(size=n_samples),
+            'X10': lambda n_samples: np.random.normal(size=n_samples),
+            'X11': linear_model(['X1', 'X5'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X12': logistic_model(['X5', 'X6'], [0, 1]),
+            'X13': linear_model(['X9','X1'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X14': linear_model(['X8'], [random.uniform(0, 1)]),
+            'X15': linear_model(['X14', 'X4', 'X27'],
+                                [random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)]),
+            'X16': linear_model(['X15', 'X2'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X17': linear_model(['X10', 'X11'], [random.uniform(0, 1), random.uniform(0, 1)]),
+            'X18': logistic_model(['X12', 'X2'], [0, 1]),
             'X19': linear_model(['X3'], [random.uniform(0, 1)]),
             'X20': linear_model(['X19', 'X6'], [random.uniform(0, 1), random.uniform(0, 1)]),
             'X21': linear_model(['X8'], [random.uniform(0, 1)]),
