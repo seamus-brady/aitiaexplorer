@@ -139,3 +139,42 @@ java.lang.NumberFormatException: For input string: "True"
 2020-06-25 23:23:49 INFO  org.reflections.Reflections:229 - Reflections took 54 ms to scan 1 urls, producing 17 keys and 270 values 
 2020-06-25 23:23:49 INFO  org.reflections.Reflections:229 - Reflections took 6 ms to scan 1 urls, producing 7 keys and 37 values 
 2020-06-25 23:23:49 INFO  org.reflections.Reflections:229 - Reflections took 9 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-28 12:47:10 INFO  org.reflections.Reflections:229 - Reflections took 129 ms to scan 1 urls, producing 17 keys and 270 values 
+2020-06-28 12:47:10 INFO  org.reflections.Reflections:229 - Reflections took 7 ms to scan 1 urls, producing 7 keys and 37 values 
+2020-06-28 12:47:10 INFO  org.reflections.Reflections:229 - Reflections took 8 ms to scan 1 urls, producing 5 keys and 32 values 
+2020-06-28 12:47:11 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:920 - Non-continuous number absent on line 2 at column 1.
+java.lang.NumberFormatException: For input string: "absent"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInContinuousData(TabularDataFileReader.java:917)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:319)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:68)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:49)
+2020-06-28 12:47:12 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:920 - Non-continuous number absent on line 2 at column 1.
+java.lang.NumberFormatException: For input string: "absent"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInContinuousData(TabularDataFileReader.java:917)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:319)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:68)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:49)
+2020-06-28 13:05:30 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:920 - Non-continuous number absent on line 2 at column 1.
+java.lang.NumberFormatException: For input string: "absent"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInContinuousData(TabularDataFileReader.java:917)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:319)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:68)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:49)
+2020-06-28 13:05:30 ERROR edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader:920 - Non-continuous number absent on line 2 at column 1.
+java.lang.NumberFormatException: For input string: "absent"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.base/java.lang.Double.parseDouble(Double.java:543)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.readInContinuousData(TabularDataFileReader.java:917)
+	at edu.pitt.dbmi.data.reader.tabular.TabularDataFileReader.read(TabularDataFileReader.java:319)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:68)
+	at edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDatasetFileReader.readInData(ContinuousTabularDatasetFileReader.java:49)
