@@ -3,12 +3,12 @@ TBD Header
 """
 import logging
 
-import networkx as nx
 import pandas as pd
 from pycausal.pycausal import pycausal
 
-from aitia_explorer.metrics.graph_metrics import GraphMetrics
 from aitia_explorer.algorithm_runner import AlgorithmRunner
+from aitia_explorer.feature_reduction.feature_reduction import UnsupervisedFeatureReduction
+from aitia_explorer.metrics.graph_metrics import GraphMetrics
 from aitia_explorer.target_data.loader import TargetData
 from aitia_explorer.util.graph_util import GraphUtil
 
@@ -23,11 +23,22 @@ class App():
     graph_metrics = GraphMetrics()
     graph_util = GraphUtil()
     data = TargetData()
+    features = UnsupervisedFeatureReduction()
 
     def __init__(self):
         self.vm_running = False
 
-    def run_analysis(self, df, algorithm_list=None, target_graph_str=None, pc=None):
+    def run_causal_discovery(self, df, target_graph_str, algorithm_list, pc):
+        """
+        Runs the causal discovery.
+        """
+        analysis_results, summary = self._run_analysis(df,
+                                                       target_graph_str=target_graph_str,
+                                                       algorithm_list=algorithm_list,
+                                                       pc=pc)
+        return analysis_results, summary
+
+    def _run_analysis(self, df, algorithm_list=None, target_graph_str=None, pc=None):
         """
         Runs an analysis on the supplied dataframe.
         This can take a PyCausalWrapper if multiple runs are being done.
@@ -80,11 +91,11 @@ class App():
             if result['causal_graph'] is None:
                 analysis_results_filtered.remove(result)
 
-        df_results = self.get_result_dataframe(analysis_results_filtered, target_graph_str)
+        df_results = self._get_result_dataframe(analysis_results_filtered, target_graph_str)
 
         return analysis_results_filtered, df_results
 
-    def get_result_dataframe(self, analysis_results_filtered, target_graph_str):
+    def _get_result_dataframe(self, analysis_results_filtered, target_graph_str):
         """
         Provides a dataframe with the analysis results.
         :param analysis_results_filtered:

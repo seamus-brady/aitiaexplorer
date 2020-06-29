@@ -34,8 +34,8 @@ class Test_App(TestAPI):
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
         dot_str = aitia.algo_runner.algo_pc(df, pc)
-        analysis_results, summary = aitia.run_analysis(df,
-                                                       target_graph_str=dot_str,
+        analysis_results, summary = aitia._run_analysis(df,
+                                                        target_graph_str=dot_str,
 
-                                                       pc=pc)
+                                                        pc=pc)
         self.assertTrue(summary is not None)

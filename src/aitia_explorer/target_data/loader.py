@@ -7,8 +7,13 @@ import random
 
 import numpy as np
 import pandas as pd
+from pgmpy.readwrite import BIFReader
+from sklearn import preprocessing
+from sklearn.preprocessing import StandardScaler
 from causalgraphicalmodels import StructuralCausalModel
 from causalgraphicalmodels.csm import logistic_model, linear_model
+
+from aitia_explorer.util.graph_util import GraphUtil
 
 _logger = logging.getLogger(__name__)
 
@@ -37,6 +42,13 @@ class TargetData:
         with open(graph_path, 'r') as dot_file:
             simulated_data_graph = dot_file.read()
         return simulated_data_graph
+
+    @staticmethod
+    def hepar2_graph():
+        graph_path = os.path.join(TargetData.graphs_dir(), "hepar2.bif")
+        reader = BIFReader(graph_path)
+        csm = GraphUtil.get_causal_graph_from_bif(reader)
+        return str(csm.draw())
 
     @staticmethod
     def simulated_data_1():
@@ -71,6 +83,44 @@ class TargetData:
         """
         data_dir = os.path.join(TargetData.data_dir(), "lucas0_train.csv")
         return pd.read_csv(data_dir)
+
+    @staticmethod
+    def hepar2_10k_data():
+        """
+        See https://www.ccd.pitt.edu/wiki/index.php/Data_Repository
+        :return:
+        """
+        # load the data
+        data_dir = os.path.join(TargetData.data_dir(), "HEPARTWO10k.csv")
+        df = pd.read_csv(data_dir)
+
+        # Create a label (category) encoder object
+        le = preprocessing.LabelEncoder()
+        df_encoded = df.apply(le.fit_transform)
+
+        # scale the data
+        df_scaled = pd.DataFrame(StandardScaler().fit_transform(df_encoded), columns=list(df))
+
+        return df_scaled
+
+    @staticmethod
+    def hepar2_100_data():
+        """
+        See https://www.ccd.pitt.edu/wiki/index.php/Data_Repository
+        :return:
+        """
+        # load the data
+        data_dir = os.path.join(TargetData.data_dir(), "HEPARTWO100.csv")
+        df = pd.read_csv(data_dir)
+
+        # Create a label (category) encoder object
+        le = preprocessing.LabelEncoder()
+        df_encoded = df.apply(le.fit_transform)
+
+        # scale the data
+        df_scaled = pd.DataFrame(StandardScaler().fit_transform(df_encoded),  columns=list(df))
+
+        return df_scaled
 
     @staticmethod
     def scm1():
@@ -131,30 +181,6 @@ class TargetData:
             'l': lambda n_samples: np.random.normal(size=n_samples),
             'm': linear_model(['k', 'l'], [0.8, 1.2]),
             'n': logistic_model(['m', 'b'], [-1, 1]),
-        })
-
-    @staticmethod
-    def virus_scm():
-        """
-        Returns a StructuralCausalModel for sampling
-        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
-        :return:
-        """
-        return StructuralCausalModel({
-            'age': lambda n_samples: np.random.normal(size=n_samples),
-            'bmi': lambda n_samples: np.random.normal(size=n_samples),
-            'gene_1': lambda n_samples: np.random.normal(size=n_samples),
-            'gene_2': lambda n_samples: np.random.normal(size=n_samples),
-            'gene_3': lambda n_samples: np.random.normal(size=n_samples),
-            'gene_4': linear_model(['age', 'gene_2'], [-1, 0.8]),
-            'gene_5': linear_model(['gene_4', 'gene_1'], [0.5, 1.5]),
-            'gene_6': linear_model(['gene_1', 'gene_5'], [0.5, 1.1]),
-            'gene_7': linear_model(['gene_6', 'gene_5'], [-1, 0.75]),
-            'blood_pressure': lambda n_samples: np.random.normal(size=n_samples),
-            'smoking': lambda n_samples: np.random.normal(size=n_samples),
-            'heart_health': linear_model(['blood_pressure', 'age'], [0.8, 1.2]),
-            'white_cell_count': linear_model(['gene_1', 'bmi'], [-1, 1]),
-            'serious_viral_illness': linear_model(['gene_3', 'heart_health', 'white_cell_count'], [-1, 0.2, 1]),
         })
 
     @staticmethod
@@ -231,7 +257,7 @@ class TargetData:
     @staticmethod
     def random_scm_treatment_outcome():
         """
-        Generates a random SCM with treatment and outcome.
+        Generates a random SCM with treatment (X12) and outcome (X18).
         :return:
         """
         return StructuralCausalModel({

@@ -1,5 +1,3 @@
-import os
-
 from tests.unit import TestAPI
 
 from aitia_explorer.target_data.loader import TargetData
@@ -39,5 +37,18 @@ class Test_Data_Loader(TestAPI):
         self.assertTrue(scm3 is not None)
 
     def test_random_scm(self):
-        random_scm = TargetData.random_scm()
+        random_scm = TargetData.random_scm1()
         self.assertTrue(random_scm is not None)
+
+    def test_hepar2_10k_data(self):
+        hepar2_10k_data = TargetData.hepar2_10k_data()
+        self.assertTrue(hepar2_10k_data is not None)
+
+    def test_hepar2_100_data(self):
+        hepar2_100_data = TargetData.hepar2_100_data()
+        self.assertTrue(hepar2_100_data is not None)
+
+    def test_hepar2_graph(self):
+        hepar2_dot = TargetData.hepar2_graph()
+        self.assertTrue(hepar2_dot is not None)
+

@@ -69,3 +69,18 @@ class GraphUtil():
         )
 
         return causal_graph
+
+    @staticmethod
+    def get_causal_graph_from_bif(bif_reader):
+        """
+        Create a CausalGraphicalModel from an bif file.
+        :param bif_reader: BifReader
+        :return: CausalGraphicalModel
+        """
+        # create a causal graph
+        causal_graph = CausalGraphicalModel(
+            nodes=bif_reader.get_variables(),
+            edges=bif_reader.get_edges()
+        )
+
+        return causal_graph
