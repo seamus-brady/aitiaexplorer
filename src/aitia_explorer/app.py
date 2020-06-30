@@ -7,7 +7,8 @@ import pandas as pd
 from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
-from aitia_explorer.feature_reduction.feature_reduction import UnsupervisedFeatureReduction
+from aitia_explorer.feature_reduction.pfa_feature_reduction import PrincipalFeatureAnalysis
+from aitia_explorer.feature_reduction.randomforest_feature_reduction import RandomForestFeatureReduction
 from aitia_explorer.metrics.graph_metrics import GraphMetrics
 from aitia_explorer.target_data.loader import TargetData
 from aitia_explorer.util.graph_util import GraphUtil
@@ -23,7 +24,8 @@ class App():
     graph_metrics = GraphMetrics()
     graph_util = GraphUtil()
     data = TargetData()
-    features = UnsupervisedFeatureReduction()
+    randomforest = RandomForestFeatureReduction()
+    pfa = PrincipalFeatureAnalysis()
 
     def __init__(self):
         self.vm_running = False
