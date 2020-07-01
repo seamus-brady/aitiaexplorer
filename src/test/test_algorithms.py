@@ -24,8 +24,8 @@ class Test_Algorithms(TestAPI):
     def test_algo_notears(self):
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        dot_str = self.pc_util.algo_notears(df)
-        self.assertTrue(dot_str is not None, "No graph returned.")
+        adj_matrix = self.pc_util.algo_notears(df)
+        self.assertTrue(adj_matrix is not None, "No graph returned.")
 
     ############### BayesEst ##################
     def test_algo_bayes_est(self):

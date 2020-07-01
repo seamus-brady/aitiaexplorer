@@ -22,7 +22,6 @@ class AlgorithmRunner:
     def __init__(self):
 
         # algorithm constants
-        self.NOTEARS = ('NOTEARS', AlgorithmRunner.algo_notears)
         self.BAYES_EST = ('BayesEst', AlgorithmRunner.algo_bayes_est)
         self.FCI = ('FCI', AlgorithmRunner.algo_fci)
         self.PC = ('PC', AlgorithmRunner.algo_pc)
@@ -34,11 +33,14 @@ class AlgorithmRunner:
         self.GFCI_mixed_data = ('GFCI-mixed-data', AlgorithmRunner.algo_gfci_mixed)
         self.RFCI_continuous = ('RFCI-continuous', AlgorithmRunner.algo_rfci_continuous)
         self.RFCI_discrete = ('RFCI-discrete', AlgorithmRunner.algo_rfci_discrete)
-        self.RFCI_mixed_data = ('RFCI-mixed-data', AlgorithmRunner.algo_rfci_mixed)
+        self.RFCI_mixed_data = ('RFCI-mixed-data', AlgorithmRunner.algo_rfci_mixed),
+        # NOTEARS is included for convenience, but will not return a labelled causal graph
+        # which makes it less useful for causal exploration.
+        # This returns an adjacency matrix instead.
+        self.NOTEARS = ('NOTEARS', AlgorithmRunner.algo_notears)
 
     def get_all_algorithms(self):
-        return [self.NOTEARS,
-                self.BAYES_EST,
+        return [self.BAYES_EST,
                 self.FCI,
                 self.PC,
                 self.FGES_continuous,
@@ -49,7 +51,8 @@ class AlgorithmRunner:
                 self.GFCI_mixed_data,
                 self.RFCI_continuous,
                 self.RFCI_discrete,
-                self.RFCI_mixed_data
+                self.RFCI_mixed_data,
+                self.NOTEARS
                 ]
 
     # -------------------------------------------------------------------------------------------------

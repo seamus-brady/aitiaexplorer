@@ -19,6 +19,26 @@ class GraphUtil():
         pass
 
     @staticmethod
+    def get_dot_from_nxgraph(nx_graph):
+        """
+        Create a dot string from an nxgraph
+        :param nx_graph
+        :return: dot str
+        """
+        return nx.nx_pydot.to_pydot(nx_graph)
+
+
+    @staticmethod
+    def get_nxgraph_from_adjacency_matrix(adjacency_matrix):
+        """
+        Create an nxgraph from an adjacency_matrix (numpy array).
+        :param adjacency_matrix: nparray
+        :return: nxgraph
+        """
+        nx_graph = nx.DiGraph(nx.from_numpy_matrix(adjacency_matrix))
+        return nx_graph
+
+    @staticmethod
     def get_nxgraph_from_dot(dot_str):
         """
         Create an nxgraph from a dot string.

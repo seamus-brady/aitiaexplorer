@@ -15,6 +15,9 @@ class NOTEARSAlgorithm():
     Based on https://github.com/jmoss20/notears
     a python package implementing "DAGs with NO TEARS: Smooth Optimization for Structure Learning",
     Xun Zheng, Bryon Aragam, Pradeem Ravikumar and Eric P. Xing (March 2018, arXiv:1803.01422)
+
+    Unfortunately this implementation contains no support for labelled nodes which makes it less useful
+    for drawing causal graphs. This returns an adjacency matrix instead.
     """
 
     def __init__(self):
@@ -40,10 +43,7 @@ class NOTEARSAlgorithm():
             # an acyclic graph can be recovered by removing the lowest weighted edges
             # (in magnitude) until the remaining graph is acyclic
             acyclic_W = notears.utils.threshold_output(output_dict['W'])
-
-            # convert to nx graph
-            nx_graph =  nx.DiGraph(nx.from_numpy_matrix(acyclic_W))
-            return nx.nx_pydot.to_pydot(nx_graph)
+            return acyclic_W
         except Exception as e:
             _logger.error(str(e))
             print(str(e))
