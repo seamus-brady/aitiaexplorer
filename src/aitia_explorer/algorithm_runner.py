@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 
 class AlgorithmRunner:
     """
-    Class that provides utility functions for py-causal.
+    Class that runs causal discovery algorithms.
     """
 
     def __init__(self):

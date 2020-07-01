@@ -2,16 +2,19 @@ import os
 
 import pandas as pd
 from pycausal.pycausal import pycausal
-
 from tests.unit import TestAPI
 
 from aitia_explorer.app import App
+from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
+from aitia_explorer.feature_selection_runner import FeatureSelectionRunner
+from aitia_explorer.target_data.loader import TargetData
 
 
 class Test_App(TestAPI):
     """
     Tests for the aitia_explorer app.
     """
+    bgmm = BayesianGaussianMixtureWrapper()
 
     def setUp(self):
         self.data_dir = os.path.join(os.path.dirname(__file__), 'resources/data')
@@ -36,6 +39,16 @@ class Test_App(TestAPI):
         dot_str = aitia.algo_runner.algo_pc(df, pc)
         analysis_results, summary = aitia._run_analysis(df,
                                                         target_graph_str=dot_str,
-
                                                         pc=pc)
         self.assertTrue(summary is not None)
+
+    def test_all_returned_features(self):
+        feature_set = set()
+        hepart_data = TargetData.hepar2_100_data()
+        feature_set.update(FeatureSelectionRunner.random_forest_feature_reduction(hepart_data, 10))
+        feature_set.update(FeatureSelectionRunner.pfa_feature_reduction(hepart_data, 10))
+        feature_set.update(FeatureSelectionRunner.linear_regression_feature_reduction(hepart_data, 10))
+        feature_set.update(FeatureSelectionRunner.xgboost_feature_reduction(hepart_data, 10))
+        feature_set.update(FeatureSelectionRunner.rfe_feature_reduction(hepart_data, 10))
+        df_reduced = self.bgmm.get_reduced_dataframe(hepart_data, list(feature_set))
+        self.assertTrue(df_reduced is not None)

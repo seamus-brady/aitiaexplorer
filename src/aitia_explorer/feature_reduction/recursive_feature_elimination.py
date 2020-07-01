@@ -3,19 +3,17 @@ TBD Header
 """
 import logging
 
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.feature_selection import RFE
 
 from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
 
 _logger = logging.getLogger(__name__)
 
 
-class RandomForestFeatureReduction:
+class RecursiveFeatureElimination:
     """
-    A class that allows a number of features to be selected.
-    This used Unsupervised Learning in the form of BayesianGaussianMixture and
-    Unsupervised RandomForestClassifier.
+    Feature ranking with recursive feature elimination.
     """
 
     bgmm = BayesianGaussianMixtureWrapper()
@@ -36,15 +34,20 @@ class RandomForestFeatureReduction:
         :return:
         """
 
-        x, y = RandomForestFeatureReduction.bgmm.get_synthetic_training_data(incoming_df)
+        x, y = RecursiveFeatureElimination.bgmm.get_synthetic_training_data(incoming_df)
 
         # Create an unsupervised random forest classifier
-        clf = RandomForestClassifier(n_estimators=10000, random_state=42, n_jobs=-1)
+        rfe = RFE(estimator=GradientBoostingClassifier(), n_features_to_select=n_features)
 
         # Train the classifier
-        clf.fit(x, y)
+        rfe.fit(x, y)
 
         # sort the feature indexes and return
-        features =  np.argsort(clf.feature_importances_)[::-1]
+        features = []
 
-        return features[:n_features]
+        for i in range(x.shape[1]):
+            # see if column has been marked true or false
+            if rfe.support_[i]:
+                features.append(i)
+
+        return features

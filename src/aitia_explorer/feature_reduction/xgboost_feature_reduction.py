@@ -24,7 +24,8 @@ class XGBoostFeatureReduction:
     def __init__(self):
         pass
 
-    def get_feature_list(self, incoming_df, n_features=5):
+    @staticmethod
+    def get_feature_list(incoming_df, n_features=5):
         """
         Uses an Unsupervised XGBClassifier with a sample generated data that is
         marked as synthetic, allowing the XGBClassifier to learn the data features.
@@ -36,10 +37,10 @@ class XGBoostFeatureReduction:
         :return:
         """
 
-        x, y = self.bgmm.get_synthetic_training_data(incoming_df)
+        x, y = XGBoostFeatureReduction.bgmm.get_synthetic_training_data(incoming_df)
 
         # Create an unsupervised random forest classifier
-        clf = XGBClassifier(n_samples=1000, n_features=n_features, n_informative=5, n_redundant=5, random_state=42)
+        clf = XGBClassifier(n_samples=1000, n_features=n_features, random_state=42, verbosity=0)
 
         # Train the classifier
         clf.fit(x, y)
@@ -47,4 +48,4 @@ class XGBoostFeatureReduction:
         # sort the feature indexes and return
         features =  np.argsort(clf.feature_importances_)[::-1]
 
-        return features[:n_features]
+        return list(features[:n_features])

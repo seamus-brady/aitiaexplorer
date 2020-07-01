@@ -7,8 +7,8 @@ import pandas as pd
 from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
-from aitia_explorer.feature_reduction.pfa_feature_reduction import PrincipalFeatureAnalysis
-from aitia_explorer.feature_reduction.randomforest_feature_reduction import RandomForestFeatureReduction
+from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
+from aitia_explorer.feature_selection_runner import FeatureSelectionRunner
 from aitia_explorer.metrics.graph_metrics import GraphMetrics
 from aitia_explorer.target_data.loader import TargetData
 from aitia_explorer.util.graph_util import GraphUtil
@@ -21,11 +21,10 @@ class App():
     The main AitiaExplorer app entry point.
     """
     algo_runner = AlgorithmRunner()
+    feature_selection = FeatureSelectionRunner()
     graph_metrics = GraphMetrics()
     graph_util = GraphUtil()
     data = TargetData()
-    randomforest = RandomForestFeatureReduction()
-    pfa = PrincipalFeatureAnalysis()
 
     def __init__(self):
         self.vm_running = False
@@ -39,6 +38,17 @@ class App():
                                                        algorithm_list=algorithm_list,
                                                        pc=pc)
         return analysis_results, summary
+
+    def get_reduced_dataframe(self, incoming_df, feature_indices, sample_with_gmm=False):
+        """
+        A wrapper call for the BayesianGaussianMixtureWrapper :)
+        :param incoming_df:
+        :param feature_indices:
+        :param sample_with_gmm:
+        :return:
+        """
+        bgmm = BayesianGaussianMixtureWrapper()
+        return bgmm.get_reduced_dataframe(incoming_df, feature_indices, sample_with_gmm)
 
     def _run_analysis(self, df, algorithm_list=None, target_graph_str=None, pc=None):
         """

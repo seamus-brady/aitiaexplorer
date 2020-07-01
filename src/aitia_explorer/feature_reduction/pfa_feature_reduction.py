@@ -25,7 +25,8 @@ class PrincipalFeatureAnalysis(object):
     def __init__(self, ):
         pass
 
-    def get_feature_list(self, incoming_df, n_features=10, q=None):
+    @staticmethod
+    def get_feature_list(incoming_df, n_features=10, q=None):
         """
         Returns a reduced list of features.
         :param incoming_df:
