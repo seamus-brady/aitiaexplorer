@@ -19,6 +19,14 @@ class Test_Algorithms(TestAPI):
     def tearDown(self):
         pass
 
+    ############### NOTEARS ##################
+
+    def test_algo_notears(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = self.pc_util.algo_notears(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
     ############### BayesEst ##################
     def test_algo_bayes_est(self):
         data_dir = os.path.join(self.data_dir, "sim_discrete_data_20vars_100cases.txt")

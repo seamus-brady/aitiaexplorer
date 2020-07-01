@@ -7,6 +7,7 @@ from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
 from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
 from aitia_explorer.algorithms.fges_algorithm import FGESAlgorithm
 from aitia_explorer.algorithms.gfci_algorithm import GFCIAlgorithm
+from aitia_explorer.algorithms.notears_algorithm import NOTEARSAlgorithm
 from aitia_explorer.algorithms.pc_algorithm import PCAlgorithm
 from aitia_explorer.algorithms.rfci_algorithm import RFCIAlgorithm
 
@@ -21,6 +22,7 @@ class AlgorithmRunner:
     def __init__(self):
 
         # algorithm constants
+        self.NOTEARS = ('NOTEARS', AlgorithmRunner.algo_notears)
         self.BAYES_EST = ('BayesEst', AlgorithmRunner.algo_bayes_est)
         self.FCI = ('FCI', AlgorithmRunner.algo_fci)
         self.PC = ('PC', AlgorithmRunner.algo_pc)
@@ -35,7 +37,8 @@ class AlgorithmRunner:
         self.RFCI_mixed_data = ('RFCI-mixed-data', AlgorithmRunner.algo_rfci_mixed)
 
     def get_all_algorithms(self):
-        return [self.BAYES_EST,
+        return [self.NOTEARS,
+                self.BAYES_EST,
                 self.FCI,
                 self.PC,
                 self.FGES_continuous,
@@ -52,6 +55,11 @@ class AlgorithmRunner:
     # -------------------------------------------------------------------------------------------------
     #                   The methods below run the causal discovery algorithms
     # -------------------------------------------------------------------------------------------------
+
+    ############### BayesEst ##################
+    @staticmethod
+    def algo_notears(df, pc=None):
+        return NOTEARSAlgorithm.run(df, pc)
 
     ############### BayesEst ##################
     @staticmethod
