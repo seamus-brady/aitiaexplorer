@@ -44,7 +44,6 @@ class App():
         feature_selection_list = self._get_feature_selection_algorithms(feature_selection_list)
 
         amalgamated_analysis_results = []
-        analysis_results = None
 
         for feature_selection in feature_selection_list:
             # get the actual function
@@ -69,16 +68,17 @@ class App():
 
         print("Completed analysis.")
 
-        # we need to amalgamate all the result dataframes
-        amalgamated_list = []
+        # we need to flatten all the results
+        amalgamated_list_of_dicts = []
+        final_results = []
         for results in amalgamated_analysis_results:
             for result in results.results:
-                amalgamated_list.append(result.asdict())
+                # append as dict for the dataframe output
+                amalgamated_list_of_dicts.append(result.asdict())
+                # flatten the results
+                final_results.append(result)
 
-        # now sort the results
-        final_df = pd.DataFrame(amalgamated_list).sort_values(by=['SHD', 'AUPR'], ascending=False)
-
-        return amalgamated_analysis_results, final_df
+        return final_results, pd.DataFrame(amalgamated_list_of_dicts)
 
     def run_causal_discovery(self, df, target_graph_str, algorithm_list, pc):
         """
