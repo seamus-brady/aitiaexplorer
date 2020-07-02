@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class AlgorithmConstants:
     """
-    Constants for use in the various algorithms.
+    Constants for use in the various causal_algorithms.
     """
 
     MIXED = 'mixed'

@@ -3,13 +3,13 @@ TBD Header
 """
 import logging
 
-from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
-from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
-from aitia_explorer.algorithms.fges_algorithm import FGESAlgorithm
-from aitia_explorer.algorithms.gfci_algorithm import GFCIAlgorithm
-from aitia_explorer.algorithms.notears_algorithm import NOTEARSAlgorithm
-from aitia_explorer.algorithms.pc_algorithm import PCAlgorithm
-from aitia_explorer.algorithms.rfci_algorithm import RFCIAlgorithm
+from aitia_explorer.causal_algorithms.bayes_est_algorithm import BayesEstAlgorithm
+from aitia_explorer.causal_algorithms.fci_algorithm import FCIAlgorithm
+from aitia_explorer.causal_algorithms.fges_algorithm import FGESAlgorithm
+from aitia_explorer.causal_algorithms.gfci_algorithm import GFCIAlgorithm
+from aitia_explorer.causal_algorithms.notears_algorithm import NOTEARSAlgorithm
+from aitia_explorer.causal_algorithms.pc_algorithm import PCAlgorithm
+from aitia_explorer.causal_algorithms.rfci_algorithm import RFCIAlgorithm
 from aitia_explorer.feature_reduction.linear_regression_feature_reduction import LinearRegressionFeatureReduction
 from aitia_explorer.feature_reduction.pfa_feature_reduction import PrincipalFeatureAnalysis
 from aitia_explorer.feature_reduction.randomforest_feature_reduction import RandomForestFeatureReduction
@@ -21,7 +21,7 @@ _logger = logging.getLogger(__name__)
 
 class FeatureSelectionRunner:
     """
-    Class that runs feature selection algorithms.
+    Class that runs feature selection causal_algorithms.
     """
 
     def __init__(self):
@@ -38,8 +38,16 @@ class FeatureSelectionRunner:
         self.XGBOOST = ('XGBOOST',
                         FeatureSelectionRunner.xgboost_feature_reduction)
 
+    def get_all_feature_selection_algorithms(self):
+        return [self.LINEAR_REGRESSION,
+                self.PRINCIPAL_FEATURE_ANALYSIS,
+                self.RANDOM_FOREST,
+                self.RECURSIVE_FEATURE_ELIMINATION,
+                self.XGBOOST
+                ]
+
     # -------------------------------------------------------------------------------------------------
-    #                   The methods below run the causal discovery algorithms
+    #                   The methods below run the causal discovery causal_algorithms
     # -------------------------------------------------------------------------------------------------
 
     ############### LinearRegressionFeatureReduction ##################

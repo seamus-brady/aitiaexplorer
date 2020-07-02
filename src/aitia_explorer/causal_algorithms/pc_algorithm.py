@@ -6,7 +6,7 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
-from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants
 
 _logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class PCAlgorithm():
     it is assumed that the causal relation between any two variables is linear,
     and that the distribution of each variable is Normal. Finally, the sample
     should ideally be i.i.d.. Simulations show that PC and several of the other
-    algorithms described here often succeed when these assumptions, needed to
+    causal_algorithms described here often succeed when these assumptions, needed to
     prove their correctness, do not strictly hold. The PC algorithm will sometimes
     output double headed edges. In the large sample limit, double headed edges
     in the output indicate that the adjacent variables have an unrecorded common

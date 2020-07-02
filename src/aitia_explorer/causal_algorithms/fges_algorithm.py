@@ -6,7 +6,7 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
-from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants
 
 _logger = logging.getLogger(__name__)
 
@@ -21,8 +21,8 @@ class FGESAlgorithm():
     which edges are added between nodes in order to increase the Bayesian score. This process
     continues until no single edge addition increases the score. Finally, it performs a backward
     stepping search that removes edges until no single edge removal can increase the score.
-    The algorithms requires a decomposable score—that is, a score that for the entire DAG model
-    is a sum of logged scores of each variables given its parents in the model. The algorithms
+    The causal_algorithms requires a decomposable score—that is, a score that for the entire DAG model
+    is a sum of logged scores of each variables given its parents in the model. The causal_algorithms
     can take all continuous data (using the SEM BIC score), all discrete data
     (using the BDeu score) or a mixture of continuous and discrete data
     (using the Conditional Gaussian score); these are all decomposable scores.

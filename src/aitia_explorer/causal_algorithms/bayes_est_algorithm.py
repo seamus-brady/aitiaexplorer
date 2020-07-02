@@ -5,7 +5,7 @@ import logging
 from pycausal.pycausal import pycausal
 from pycausal import search as s
 
-from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants
 
 _logger = logging.getLogger(__name__)
 

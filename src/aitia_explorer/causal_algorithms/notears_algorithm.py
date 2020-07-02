@@ -3,9 +3,9 @@ TBD Header
 """
 import logging
 import networkx as nx
-import aitia_explorer.algorithms.notears as notears
+import aitia_explorer.causal_algorithms.notears as notears
 
-from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants
 
 _logger = logging.getLogger(__name__)
 

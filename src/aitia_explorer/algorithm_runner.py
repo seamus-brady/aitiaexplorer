@@ -3,20 +3,20 @@ TBD Header
 """
 import logging
 
-from aitia_explorer.algorithms.bayes_est_algorithm import BayesEstAlgorithm
-from aitia_explorer.algorithms.fci_algorithm import FCIAlgorithm
-from aitia_explorer.algorithms.fges_algorithm import FGESAlgorithm
-from aitia_explorer.algorithms.gfci_algorithm import GFCIAlgorithm
-from aitia_explorer.algorithms.notears_algorithm import NOTEARSAlgorithm
-from aitia_explorer.algorithms.pc_algorithm import PCAlgorithm
-from aitia_explorer.algorithms.rfci_algorithm import RFCIAlgorithm
+from aitia_explorer.causal_algorithms.bayes_est_algorithm import BayesEstAlgorithm
+from aitia_explorer.causal_algorithms.fci_algorithm import FCIAlgorithm
+from aitia_explorer.causal_algorithms.fges_algorithm import FGESAlgorithm
+from aitia_explorer.causal_algorithms.gfci_algorithm import GFCIAlgorithm
+from aitia_explorer.causal_algorithms.notears_algorithm import NOTEARSAlgorithm
+from aitia_explorer.causal_algorithms.pc_algorithm import PCAlgorithm
+from aitia_explorer.causal_algorithms.rfci_algorithm import RFCIAlgorithm
 
 _logger = logging.getLogger(__name__)
 
 
 class AlgorithmRunner:
     """
-    Class that runs causal discovery algorithms.
+    Class that runs causal discovery causal_algorithms.
     """
 
     def __init__(self):
@@ -39,7 +39,7 @@ class AlgorithmRunner:
         # This returns an adjacency matrix instead.
         self.NOTEARS = ('NOTEARS', AlgorithmRunner.algo_notears)
 
-    def get_all_algorithms(self):
+    def get_all_causal_algorithms(self):
         return [self.BAYES_EST,
                 self.FCI,
                 self.PC,
@@ -56,7 +56,7 @@ class AlgorithmRunner:
                 ]
 
     # -------------------------------------------------------------------------------------------------
-    #                   The methods below run the causal discovery algorithms
+    #                   The methods below run the causal discovery causal_algorithms
     # -------------------------------------------------------------------------------------------------
 
     ############### BayesEst ##################

@@ -3,10 +3,12 @@ TBD Header
 """
 import logging
 
-import pandas as pd
+from copy import copy
 from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
+from aitia_explorer.entities.analysis_results import AnalysisResults
+from aitia_explorer.entities.single_analysis_result import SingleAnalysisResult
 from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
 from aitia_explorer.feature_selection_runner import FeatureSelectionRunner
 from aitia_explorer.metrics.graph_metrics import GraphMetrics
@@ -59,7 +61,7 @@ class App():
         :param pc: pycausal wrapper
         :return: list of results
         """
-        analysis_results = []
+        analysis_results = AnalysisResults()
         pc_supplied = True
 
         # get py-causal if needed
@@ -68,73 +70,80 @@ class App():
             pc = pycausal()
             pc.start_vm()
 
-        algo_list = algorithm_list
-        if algo_list is None:
-            algo_list = self.algo_runner.get_all_algorithms()
+        algo_list = self._get_causal_algorithms(algorithm_list)
 
         for algo in algo_list:
             # dict to store run result
-            single_result = dict()
-            single_result['algo_name'] = algo[0]
+            analysis_result = SingleAnalysisResult()
+            analysis_result.causal_algorithm = algo[0]
 
-            # discover the graph using algo
-            algo_func = algo[1]
-            dot_str = algo_func(df, pc)
+            # get the graph from the algo
+            algo_fn = algo[1]
+            dot_str = self._discover_graph(algo_fn, df, pc)
 
             # store the dot graph
-            single_result['dot_str'] = dot_str
+            analysis_result.dot_format_string = dot_str
 
-            # get the causal graph
+            # convert the causal graph
             if dot_str is not None:
                 causal_graph = self.graph_util.get_causal_graph_from_dot(dot_str)
-                single_result['causal_graph'] = causal_graph
-            else:
-                single_result['causal_graph'] = None
+                analysis_result.causal_graph = causal_graph
 
-            analysis_results.append(single_result)
+            analysis_results.results.append(analysis_result)
 
         # shutdown the java vm if needed
         if not pc_supplied:
             pc.stop_vm()
 
         # filter the results
-        analysis_results_filtered = analysis_results.copy()
-        for result in analysis_results:
-            if result['causal_graph'] is None:
-                analysis_results_filtered.remove(result)
+        analysis_results_filtered = self._filter_empty_results(analysis_results)
 
-        df_results = self._get_result_dataframe(analysis_results_filtered, target_graph_str)
+        # add the causal metrics
+        updated_analysis_results = self._add_causal_metrics(analysis_results_filtered, target_graph_str)
 
-        return analysis_results_filtered, df_results
+        return updated_analysis_results
 
-    def _get_result_dataframe(self, analysis_results_filtered, target_graph_str):
+    def _discover_graph(self, algo_fn, df, pc):
+        # discover the graph using algo
+        dot_str = algo_fn(df, pc)
+        return dot_str
+
+    def _filter_empty_results(self, incoming_results):
+        filtered_results = AnalysisResults()
+        for result in incoming_results.results:
+            if result.causal_graph is not None:
+                filtered_results.results.append(result)
+        return filtered_results
+
+    def _get_causal_algorithms(self, algorithm_list):
+        algo_list = algorithm_list
+        if algo_list is None:
+            algo_list = self.algo_runner.get_all_causal_algorithms()
+        return algo_list
+
+    def _add_causal_metrics(self, incoming_analysis_results, target_graph_str):
         """
-        Provides a dataframe with the analysis results.
-        :param analysis_results_filtered:
+        Provides the causal analysis results.
+        :param incoming_analysis_results:
         :param target_graph_str:
-        :return:
+        :return: df
         """
-        df_results = pd.DataFrame(
-            columns=('Algorithm',
-                     'AUPR',
-                     'SHD'))
-
+        return_analysis_results = AnalysisResults()
         target_nxgraph = None
         if target_graph_str is not None:
             target_nxgraph = self.graph_util.get_nxgraph_from_dot(target_graph_str)
 
-        for result in analysis_results_filtered:
-            if result['dot_str'] is not None and result['causal_graph'] is not None:
-                pred_graph = self.graph_util.get_nxgraph_from_dot(result['dot_str'])
+        for result in incoming_analysis_results.results:
+            if result.dot_format_string is not None \
+                    and result.causal_graph is not None:
+                pred_graph = self.graph_util.get_nxgraph_from_dot(result.dot_format_string)
                 if target_nxgraph is not None:
                     prec_recall = self.graph_metrics.precision_recall(target_nxgraph, pred_graph)[0]
                     shd = self.graph_metrics.SHD(target_nxgraph, pred_graph)
                 else:
                     prec_recall = 0
                     shd = 0
-                new_row = {'Algorithm': result['algo_name'],
-                           'AUPR': prec_recall,
-                           'SHD': shd
-                           }
-                df_results = df_results.append(new_row, ignore_index=True)
-        return df_results
+                result.AUPR = prec_recall
+                result.SHD = shd
+            return_analysis_results.results.append(result)
+        return return_analysis_results

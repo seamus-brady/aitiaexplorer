@@ -6,17 +6,26 @@ import logging
 from pycausal import search as s
 from pycausal.pycausal import pycausal
 
-from aitia_explorer.algorithms.algorithm_constants import AlgorithmConstants
+from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants
 
 _logger = logging.getLogger(__name__)
 
 
-class RFCIAlgorithm():
+class GFCIAlgorithm():
     """
-    A modification of the FCI algorithm in which some expensive steps are finessed and the
-    output is somewhat differently interpreted. In most cases this runs faster than FCI
-    (which can be slow in some steps) and is almost as informative. See Colombo et al., 2012.
+    GFCI is a combination of the FGES [CCD-FGES, 2016] algorithm and the FCI algorithm [Spirtes, 1993]
+    that improves upon the accuracy and efficiency of FCI. In order to understand the basic methodology
+    of GFCI, it is necessary to understand some basic facts about the FGES and FCI causal_algorithms.
+    The FGES algorithm is used to improve the accuracy of both the adjacency phase and the orientation
+    phase of FCI by providing a more accurate initial graph that contains a subset of both the
+    non-adjacencies and orientations of the final output of FCI. The initial set of nonadjacencies
+    given by FGES is augmented by FCI performing a set of conditional independence tests that lead
+    to the removal of some further adjacencies whenever a conditioning set is found that makes two
+    adjacent variables independent. After the adjacency phase of FCI, some of the orientations of F
+    GES are then used to provide an initial orientation of the undirected graph that is then
+    augmented by the orientation phase of FCI to provide additional orientations.
     """
+
 
     def __init__(self):
         pass
@@ -38,12 +47,14 @@ class RFCIAlgorithm():
                 single_run = True
 
             tetrad = s.tetradrunner()
-            tetrad.run(algoId='rfci',
+            tetrad.run(algoId='gfci',
                        dfs=df,
                        testId='fisher-z-test',
-                       depth=-1,
+                       scoreId='sem-bic',
+                       maxDegree=-1,
                        maxPathLength=-1,
                        completeRuleSetUsed=False,
+                       faithfulnessAssumed=True,
                        verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
@@ -73,13 +84,15 @@ class RFCIAlgorithm():
                 single_run = True
 
             tetrad = s.tetradrunner()
-            tetrad.run(algoId='rfci',
+            tetrad.run(algoId='gfci',
                        dfs=df,
-                       testId='chi-square-test',
+                       testId='bdeu-test',
+                       scoreId='bdeu-score',
                        dataType=AlgorithmConstants.DISCRETE,
-                       depth=3,
+                       maxDegree=3,
                        maxPathLength=-1,
-                       completeRuleSetUsed=True,
+                       completeRuleSetUsed=False,
+                       faithfulnessAssumed=True,
                        verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)
@@ -109,15 +122,16 @@ class RFCIAlgorithm():
                 single_run = True
 
             tetrad = s.tetradrunner()
-            tetrad.run(algoId='rfci',
+            tetrad.run(algoId='gfci',
                        dfs=df,
                        testId='cg-lr-test',
+                       scoreId='cg-bic-score',
                        dataType=AlgorithmConstants.MIXED,
                        numCategoriesToDiscretize=4,
-                       depth=-1,
+                       maxDegree=3,
                        maxPathLength=-1,
-                       discretize=False,
                        completeRuleSetUsed=False,
+                       faithfulnessAssumed=True,
                        verbose=AlgorithmConstants.VERBOSE)
             graph = tetrad.getTetradGraph()
             dot_str = pc.tetradGraphToDot(graph)

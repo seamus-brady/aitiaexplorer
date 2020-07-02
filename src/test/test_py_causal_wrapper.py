@@ -59,7 +59,7 @@ class Test_PyCausalWrapper(TestAPI):
         dot_str_list = []
         data_dir = os.path.join(self.data_dir, "charity.txt")
         df = pd.read_table(data_dir, sep="\t")
-        for algo in self.pc_util.get_all_algorithms():
+        for algo in self.pc_util.get_all_causal_algorithms():
             algo = algo[1] # just need the func
             dot_str_list.append(algo(df, pc))
         pc.stop_vm()

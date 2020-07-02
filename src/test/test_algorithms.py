@@ -8,7 +8,7 @@ from aitia_explorer.algorithm_runner import AlgorithmRunner
 
 class Test_Algorithms(TestAPI):
     """
-    Tests for individual causal discovery algorithms.
+    Tests for individual causal discovery causal_algorithms.
     Please note these tests have to be run individually as the Java VM wrapper in PyCausal
     does not like repeated runs! But hopefully they are still useful.
     """
