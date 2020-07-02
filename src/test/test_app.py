@@ -30,7 +30,7 @@ class Test_App(TestAPI):
         self.assertTrue(target_graph_str is not None)
         self.assertTrue(df is not None)
 
-    def test_run_analysis(self):
+    def test_run_causal_analysis(self):
         pc = pycausal()
         pc.start_vm()
         aitia = App()
@@ -42,11 +42,40 @@ class Test_App(TestAPI):
         algorithm_list = []
         algorithm_list.append(aitia.algo_runner.PC)
         algorithm_list.append(aitia.algo_runner.FCI)
-        analysis_results = aitia._run_analysis(df,
-                                               algorithm_list=algorithm_list,
-                                               target_graph_str=dot_str,
-                                               pc=pc)
+        analysis_results = aitia._run_causal_algorithms(df,
+                                                        algorithm_list=algorithm_list,
+                                                        target_graph_str=dot_str,
+                                                        pc=pc)
         self.assertTrue(analysis_results is not None)
+
+    def test_run_full_analysis(self):
+        # setup
+        pc = pycausal()
+        pc.start_vm()
+        aitia = App()
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+
+        # just need a test graph
+        dot_str = aitia.algo_runner.algo_pc(df, pc)
+
+        # feature selection algos
+        feature_selection_list = []
+        feature_selection_list.append(aitia.feature_selection.LINEAR_REGRESSION)
+        feature_selection_list.append(aitia.feature_selection.PRINCIPAL_FEATURE_ANALYSIS)
+
+        # causal algo list
+        algorithm_list = []
+        algorithm_list.append(aitia.algo_runner.PC)
+        algorithm_list.append(aitia.algo_runner.FCI)
+        analysis_results, summary_df = aitia.run_analysis(df,
+                                                          target_graph_str=dot_str,
+                                                          n_features=4,
+                                                          feature_selection_list=feature_selection_list,
+                                                          algorithm_list=algorithm_list,
+                                                          pc=pc)
+        self.assertTrue(analysis_results is not None)
+        self.assertTrue(summary_df is not None)
 
     def test_all_returned_features(self):
         feature_set = set()

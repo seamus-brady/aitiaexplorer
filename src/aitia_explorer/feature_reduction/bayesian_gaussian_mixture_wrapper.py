@@ -20,10 +20,6 @@ class BayesianGaussianMixtureWrapper(object):
     def get_gmm_sample_data(self, incoming_df, column_list, sample_size):
         """
         Unsupervised Learning in the form of BayesianGaussianMixture to create sample data.
-        :param incoming_df: df
-        :param column_list: list
-        :param sample_size: int
-        :return: df
         """
         gmm = mixture.BayesianGaussianMixture(n_components=2,
                                               covariance_type="full",
@@ -37,8 +33,6 @@ class BayesianGaussianMixtureWrapper(object):
         """
         Creates synthetic training data by sampling from a BayesianGaussianMixture supplied distribution.
         Synthetic data is then labelled differently from the original data.
-        :param incoming_df:
-        :return: np.array, np.array
         """
         # number of records in df
         number_records = len(incoming_df.index)
@@ -68,10 +62,6 @@ class BayesianGaussianMixtureWrapper(object):
     def get_reduced_dataframe(self, incoming_df, feature_indices, sample_with_gmm=False):
         """
         Returns a df with the requested features only.
-        :param incoming_df: df
-        :param requested_features: list of features
-        :param sample_with_gmm: boolean, should sample with BayesianGaussianMixture?
-        :return: df
         """
         requested_features = [list(incoming_df)[i] for i in feature_indices]
         df_reduced = incoming_df[requested_features]
@@ -79,4 +69,4 @@ class BayesianGaussianMixtureWrapper(object):
             return self.get_gmm_sample_data(df_reduced,
                                             list(df_reduced),
                                             len(df_reduced.index))
-        return df_reduced
+        return df_reduced, requested_features

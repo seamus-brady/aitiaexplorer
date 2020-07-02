@@ -20,15 +20,15 @@ class SingleAnalysisResult():
         self.AUPR = None
         self.SHD = None
 
+
     def asdict(self):
         """
         For displaying in notebooks...
         :return:
         """
-        return {'causal_algorithm': self.causal_algorithm,
-                'feature_selection_method': self.feature_selection_method,
-                'feature_list': self.feature_list,
-                'dot_format_string': self.dot_format_string,
+        return {'causal algorithm': self.causal_algorithm,
+                'feature selection method': self.feature_selection_method,
+                'feature list': self.feature_list,
                 'AUPR': self.AUPR,
                 'SHD': self.SHD
                 }

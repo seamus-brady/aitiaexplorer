@@ -2,8 +2,8 @@
 TBD Header
 """
 import logging
+import pandas as pd
 
-from copy import copy
 from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
@@ -31,35 +31,82 @@ class App():
     def __init__(self):
         self.vm_running = False
 
+    def run_analysis(self,
+                     incoming_df,
+                     target_graph_str=None,
+                     n_features=10,
+                     feature_selection_list=None,
+                     algorithm_list=None,
+                     pc=None):
+        """
+        Runs the entire analysis with feature selection and causal discovery.
+        """
+        feature_selection_list = self._get_feature_selection_algorithms(feature_selection_list)
+
+        amalgamated_analysis_results = []
+        analysis_results = None
+
+        for feature_selection in feature_selection_list:
+            # get the actual function
+            feature_func = feature_selection[1]
+
+            # get the feature list from the function
+            features = feature_func(incoming_df, n_features)
+
+            print("Running causal discovery on features selected by {0}".format(feature_selection[0]))
+
+            # get the reduced dataframe
+            df_reduced, requested_features = self.get_reduced_dataframe(incoming_df, features)
+
+            analysis_results = self._run_causal_algorithms(df_reduced,
+                                                           feature_selection_method=feature_selection[0],
+                                                           requested_features=requested_features,
+                                                           target_graph_str=target_graph_str,
+                                                           algorithm_list=algorithm_list,
+                                                           pc=pc)
+
+            amalgamated_analysis_results.append(analysis_results)
+
+        print("Completed analysis.")
+
+        # we need to amalgamate all the result dataframes
+        amalgamated_list = []
+        for results in amalgamated_analysis_results:
+            for result in results.results:
+                amalgamated_list.append(result.asdict())
+
+        # now sort the results
+        final_df = pd.DataFrame(amalgamated_list).sort_values(by=['SHD', 'AUPR'], ascending=False)
+
+        return amalgamated_analysis_results, final_df
+
     def run_causal_discovery(self, df, target_graph_str, algorithm_list, pc):
         """
         Runs the causal discovery.
         """
-        analysis_results, summary = self._run_analysis(df,
+        analysis_results = self._run_causal_algorithms(df,
                                                        target_graph_str=target_graph_str,
                                                        algorithm_list=algorithm_list,
                                                        pc=pc)
-        return analysis_results, summary
+        return analysis_results, analysis_results.to_dataframe()
 
     def get_reduced_dataframe(self, incoming_df, feature_indices, sample_with_gmm=False):
         """
         A wrapper call for the BayesianGaussianMixtureWrapper :)
-        :param incoming_df:
-        :param feature_indices:
-        :param sample_with_gmm:
-        :return:
         """
         bgmm = BayesianGaussianMixtureWrapper()
         return bgmm.get_reduced_dataframe(incoming_df, feature_indices, sample_with_gmm)
 
-    def _run_analysis(self, df, algorithm_list=None, target_graph_str=None, pc=None):
+    def _run_causal_algorithms(self,
+                               incoming_df,
+                               requested_features=None,
+                               feature_selection_method=None,
+                               algorithm_list=None,
+                               target_graph_str=None,
+                               pc=None):
         """
         Runs an analysis on the supplied dataframe.
         This can take a PyCausalWrapper if multiple runs are being done.
-        :param target_graph:
-        :param df: dataframe
-        :param pc: pycausal wrapper
-        :return: list of results
         """
         analysis_results = AnalysisResults()
         pc_supplied = True
@@ -75,11 +122,15 @@ class App():
         for algo in algo_list:
             # dict to store run result
             analysis_result = SingleAnalysisResult()
+            analysis_result.feature_selection_method = feature_selection_method
+            analysis_result.feature_list = requested_features
             analysis_result.causal_algorithm = algo[0]
+
+            print("Running causal discovery using {0}".format(algo[0]))
 
             # get the graph from the algo
             algo_fn = algo[1]
-            dot_str = self._discover_graph(algo_fn, df, pc)
+            dot_str = self._discover_graph(algo_fn, incoming_df, pc)
 
             # store the dot graph
             analysis_result.dot_format_string = dot_str
@@ -101,10 +152,13 @@ class App():
         # add the causal metrics
         updated_analysis_results = self._add_causal_metrics(analysis_results_filtered, target_graph_str)
 
+        print("Completed causal discovery.")
         return updated_analysis_results
 
     def _discover_graph(self, algo_fn, df, pc):
-        # discover the graph using algo
+        """
+        Siscover the graph using the supplied algorithm function.
+        """
         dot_str = algo_fn(df, pc)
         return dot_str
 
@@ -115,7 +169,19 @@ class App():
                 filtered_results.results.append(result)
         return filtered_results
 
+    def _get_feature_selection_algorithms(self, feature_selection_list):
+        """
+        Gets the list of feature selection algorithms to run.
+        """
+        algo_list = feature_selection_list
+        if algo_list is None:
+            algo_list = self.feature_selection.get_all_feature_selection_algorithms()
+        return algo_list
+
     def _get_causal_algorithms(self, algorithm_list):
+        """
+        Gets the list of causal algorithms to run.
+        """
         algo_list = algorithm_list
         if algo_list is None:
             algo_list = self.algo_runner.get_all_causal_algorithms()
@@ -124,9 +190,6 @@ class App():
     def _add_causal_metrics(self, incoming_analysis_results, target_graph_str):
         """
         Provides the causal analysis results.
-        :param incoming_analysis_results:
-        :param target_graph_str:
-        :return: df
         """
         return_analysis_results = AnalysisResults()
         target_nxgraph = None
