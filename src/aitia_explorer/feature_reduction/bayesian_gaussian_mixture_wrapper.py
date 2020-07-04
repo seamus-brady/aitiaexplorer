@@ -43,11 +43,12 @@ class BayesianGaussianMixtureWrapper(object):
         # set the class on the samples
         df_bgmm['original_data'] = 0
 
-        # add the class to the incoming df
-        incoming_df['original_data'] = 1
+        # add the class to a copy of incoming df, stops weird errors due to changed dataframes
+        working_df = incoming_df.copy(deep=True)
+        working_df['original_data'] = 1
 
         # concatinate the two dataframes
-        df_combined = incoming_df.append(df_bgmm, ignore_index=True)
+        df_combined = working_df.append(df_bgmm, ignore_index=True)
 
         # shuffle the data
         df_combined = df_combined.sample(frac=1)

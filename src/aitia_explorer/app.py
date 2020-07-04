@@ -27,6 +27,7 @@ class App():
     graph_metrics = GraphMetrics()
     graph_util = GraphUtil()
     data = TargetData()
+    bgmm = BayesianGaussianMixtureWrapper()
 
     def __init__(self):
         self.vm_running = False
