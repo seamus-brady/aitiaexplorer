@@ -22,9 +22,9 @@ class RecursiveFeatureElimination:
         pass
 
     @staticmethod
-    def get_feature_list(incoming_df, n_features=5):
+    def get_feature_list(incoming_df, n_features=None):
         """
-        Uses an Unsupervised RandomForestClassifier with a sample generated data that is
+        Uses an Unsupervised GradientBoostingClassifier with a sample generated data that is
         marked as synthetic, allowing the RandomForestClassifier to learn the data features.
         A list of features is returned sorted by importance.
         :param incoming_df:
@@ -34,9 +34,13 @@ class RecursiveFeatureElimination:
         :return:
         """
 
+        if n_features is None:
+            # set to the number of columns in the df
+            n_features = len(list(incoming_df))
+
         x, y = RecursiveFeatureElimination.bgmm.get_synthetic_training_data(incoming_df)
 
-        # Create an unsupervised random forest classifier
+        # Create an rfe
         rfe = RFE(estimator=GradientBoostingClassifier(), n_features_to_select=n_features)
 
         # Train the classifier

@@ -4,14 +4,14 @@ TBD Header
 import logging
 
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import SGDClassifier
 
 from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
 
 _logger = logging.getLogger(__name__)
 
 
-class LinearRegressionFeatureReduction(object):
+class SGDClassifierFeatureReduction(object):
     """
     A class that allows a number of features to be selected.
     This uses Unsupervised Learning in the form of LinearRegression.
@@ -32,10 +32,10 @@ class LinearRegressionFeatureReduction(object):
         """
 
         # define the model
-        model = LinearRegression()
+        model = SGDClassifier()
 
         # get ths synthetic data
-        x, y = LinearRegressionFeatureReduction.bgmm.get_synthetic_training_data(incoming_df)
+        x, y = SGDClassifierFeatureReduction.bgmm.get_synthetic_training_data(incoming_df)
 
         # fit the model
         model.fit(x, y)
@@ -45,6 +45,9 @@ class LinearRegressionFeatureReduction(object):
 
         # sort the feature indexes and return
         features = np.argsort(coefs)[::-1]
+
+        # flatten nested list
+        features = features[0]
 
         if n_features is None:
             # set to the number of columns in the df

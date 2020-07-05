@@ -4,7 +4,6 @@ TBD Header
 import logging
 
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
 from aitia_explorer.feature_reduction.bayesian_gaussian_mixture_wrapper import BayesianGaussianMixtureWrapper
@@ -25,7 +24,7 @@ class XGBoostFeatureReduction:
         pass
 
     @staticmethod
-    def get_feature_list(incoming_df, n_features=5):
+    def get_feature_list(incoming_df, n_features=None):
         """
         Uses an Unsupervised XGBClassifier with a sample generated data that is
         marked as synthetic, allowing the XGBClassifier to learn the data features.
@@ -36,6 +35,10 @@ class XGBoostFeatureReduction:
         :param outcome:
         :return:
         """
+
+        if n_features is None:
+            # set to the number of columns in the df
+            n_features = len(list(incoming_df))
 
         x, y = XGBoostFeatureReduction.bgmm.get_synthetic_training_data(incoming_df)
 

@@ -26,7 +26,7 @@ class PrincipalFeatureAnalysis(object):
         pass
 
     @staticmethod
-    def get_feature_list(incoming_df, n_features=10, q=None):
+    def get_feature_list(incoming_df, n_features=None, q=None):
         """
         Returns a reduced list of features.
         :param incoming_df:
@@ -34,6 +34,10 @@ class PrincipalFeatureAnalysis(object):
         :param q:
         :return:
         """
+
+        if n_features is None:
+            # set to the number of columns in the df
+            n_features = len(list(incoming_df))
 
         if not q:
             q = incoming_df.shape[1]

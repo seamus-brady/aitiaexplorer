@@ -41,6 +41,13 @@ class Test_Feature_Reduction(TestAPI):
         df_reduced = self.bgmm.get_reduced_dataframe(hepart_data, feature_indices)
         self.assertTrue(df_reduced is not None)
 
+    def test_sgdclassifier(self):
+        hepart_data = TargetData.hepar2_100_data()
+        self.assertTrue(hepart_data is not None, "No data loaded.")
+        feature_indices = FeatureSelectionRunner.sgdclassifier_feature_reduction(hepart_data, 10)
+        df_reduced = self.bgmm.get_reduced_dataframe(hepart_data, feature_indices)
+        self.assertTrue(df_reduced is not None)
+
     def test_xgboost(self):
         hepart_data = TargetData.hepar2_100_data()
         self.assertTrue(hepart_data is not None, "No data loaded.")

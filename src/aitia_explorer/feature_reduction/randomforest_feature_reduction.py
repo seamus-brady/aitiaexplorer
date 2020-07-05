@@ -24,7 +24,7 @@ class RandomForestFeatureReduction:
         pass
 
     @staticmethod
-    def get_feature_list(incoming_df, n_features=5):
+    def get_feature_list(incoming_df, n_features=None):
         """
         Uses an Unsupervised RandomForestClassifier with a sample generated data that is
         marked as synthetic, allowing the RandomForestClassifier to learn the data features.
@@ -45,6 +45,10 @@ class RandomForestFeatureReduction:
         clf.fit(x, y)
 
         # sort the feature indexes and return
-        features =  np.argsort(clf.feature_importances_)[::-1]
+        features = np.argsort(clf.feature_importances_)[::-1]
+
+        if n_features is None:
+            # set to the number of columns in the df
+            n_features = len(list(incoming_df))
 
         return features[:n_features]
