@@ -61,6 +61,7 @@ class App():
             # check to see if this reduced dataframe has introduced unobserved latent edges
             latent_edges = []
             latent_edges.extend(self.algo_runner.algo_miic(df_reduced))
+            print("There are {0} latent edges in the reduced dataset".format(len(latent_edges)))
 
             analysis_results = self._run_causal_algorithms(df_reduced,
                                                            feature_selection_method=feature_selection[0],
