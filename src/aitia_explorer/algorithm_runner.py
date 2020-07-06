@@ -7,6 +7,8 @@ from aitia_explorer.causal_algorithms.bayes_est_algorithm import BayesEstAlgorit
 from aitia_explorer.causal_algorithms.fci_algorithm import FCIAlgorithm
 from aitia_explorer.causal_algorithms.fges_algorithm import FGESAlgorithm
 from aitia_explorer.causal_algorithms.gfci_algorithm import GFCIAlgorithm
+from aitia_explorer.causal_algorithms.hill_climbing_algorithm import HillClimbingAlgorithm
+from aitia_explorer.causal_algorithms.miic_algorithm import MIICAlgorithm
 from aitia_explorer.causal_algorithms.notears_algorithm import NOTEARSAlgorithm
 from aitia_explorer.causal_algorithms.pc_algorithm import PCAlgorithm
 from aitia_explorer.causal_algorithms.rfci_algorithm import RFCIAlgorithm
@@ -20,8 +22,7 @@ class AlgorithmRunner:
     """
 
     def __init__(self):
-
-        # algorithm constants
+        # causal discovery algorithm constants
         self.BAYES_EST = ('BayesEst', AlgorithmRunner.algo_bayes_est)
         self.FCI = ('FCI', AlgorithmRunner.algo_fci)
         self.PC = ('PC', AlgorithmRunner.algo_pc)
@@ -33,11 +34,19 @@ class AlgorithmRunner:
         self.GFCI_mixed_data = ('GFCI-mixed-data', AlgorithmRunner.algo_gfci_mixed)
         self.RFCI_continuous = ('RFCI-continuous', AlgorithmRunner.algo_rfci_continuous)
         self.RFCI_discrete = ('RFCI-discrete', AlgorithmRunner.algo_rfci_discrete)
-        self.RFCI_mixed_data = ('RFCI-mixed-data', AlgorithmRunner.algo_rfci_mixed),
+        self.RFCI_mixed_data = ('RFCI-mixed-data', AlgorithmRunner.algo_rfci_mixed)
+
         # NOTEARS is included for convenience, but will not return a labelled causal graph
         # which makes it less useful for causal exploration.
         # This returns an adjacency matrix instead.
         self.NOTEARS = ('NOTEARS', AlgorithmRunner.algo_notears)
+
+        # this greedy hill climbing algorithm is provided to approimate missing
+        # target graphs so we can provide some heuristics to the user
+        self.HILL_CLIMBING = ('HILL_CLIMBING', AlgorithmRunner.algo_hill_climber)
+
+        # the MIIC algorithm is used to return a list of unobserved latent edges in a dataframe
+        self.MIIC = ('MIIC', AlgorithmRunner.algo_miic)
 
     def get_all_causal_algorithms(self):
         return [self.BAYES_EST,
@@ -52,7 +61,9 @@ class AlgorithmRunner:
                 self.RFCI_continuous,
                 self.RFCI_discrete,
                 self.RFCI_mixed_data,
-                self.NOTEARS
+                self.NOTEARS,
+                self.HILL_CLIMBING,
+                self.MIIC
                 ]
 
     # -------------------------------------------------------------------------------------------------
@@ -117,3 +128,13 @@ class AlgorithmRunner:
     @staticmethod
     def algo_rfci_mixed(df, pc=None):
         return RFCIAlgorithm.run_mixed(df, pc)
+
+    ############### Hill Climber ##################
+    @staticmethod
+    def algo_hill_climber(df, pc=None):
+        return HillClimbingAlgorithm.run(df, pc)
+
+    ############### MIIC ##################
+    @staticmethod
+    def algo_miic(df, pc=None):
+        return MIICAlgorithm.run(df, pc)

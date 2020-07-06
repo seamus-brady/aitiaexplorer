@@ -24,8 +24,6 @@ class BayesEstAlgorithm():
     def run(df, pc=None):
         """
         Run the algorithm against the dataframe to return a dot format causal graph.
-        :param df: dataframe
-        :return: dot graph string
         """
         dot_str = None
         try:

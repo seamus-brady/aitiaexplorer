@@ -25,8 +25,6 @@ class RFCIAlgorithm():
     def run_continuous(df, pc=None):
         """
         Run the algorithm against a continuous dataframe to return a dot format causal graph.
-        :param df: dataframe
-        :return: dot graph string
         """
         single_run = False
         dot_str = None

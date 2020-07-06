@@ -51,8 +51,6 @@ class PCAlgorithm():
     def run(df, pc=None):
         """
         Run the algorithm against the dataframe to return a dot format causal graph.
-        :param df: dataframe
-        :return: dot graph string
         """
         single_run = False
         dot_str = None

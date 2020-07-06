@@ -27,9 +27,6 @@ class NOTEARSAlgorithm():
     def run(df, pc=None):
         """
         Run the algorithm against the dataframe to return a dot format causal graph.
-        :param pc: Not used, kept for api consistency
-        :param df: dataframe
-        :return: dot graph string
         """
         dot_str = None
         try:

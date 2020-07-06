@@ -58,11 +58,16 @@ class App():
             # get the reduced dataframe
             df_reduced, requested_features = self.get_reduced_dataframe(incoming_df, features)
 
+            # check to see if this reduced dataframe has introduced unobserved latent edges
+            latent_edges = []
+            latent_edges.extend(self.algo_runner.algo_miic(df_reduced))
+
             analysis_results = self._run_causal_algorithms(df_reduced,
                                                            feature_selection_method=feature_selection[0],
                                                            requested_features=requested_features,
                                                            target_graph_str=target_graph_str,
                                                            algorithm_list=algorithm_list,
+                                                           latent_edges=latent_edges,
                                                            pc=pc)
 
             amalgamated_analysis_results.append(analysis_results)
@@ -104,6 +109,7 @@ class App():
                                feature_selection_method=None,
                                algorithm_list=None,
                                target_graph_str=None,
+                               latent_edges=[],
                                pc=None):
         """
         Runs an analysis on the supplied dataframe.
@@ -126,6 +132,7 @@ class App():
             analysis_result.feature_selection_method = feature_selection_method
             analysis_result.feature_list = requested_features
             analysis_result.causal_algorithm = algo[0]
+            analysis_result.latent_edges = latent_edges
 
             print("Running causal discovery using {0}".format(algo[0]))
 
@@ -140,6 +147,9 @@ class App():
             if dot_str is not None:
                 causal_graph = self.graph_util.get_causal_graph_from_dot(dot_str)
                 analysis_result.causal_graph = causal_graph
+                nx_graph =self.graph_util.get_digraph_from_dot(dot_str)
+                analysis_result.causal_graph_with_latent_edges = \
+                    self.graph_util.get_causal_graph_with_latent_edges(nx_graph, latent_edges)
 
             analysis_results.results.append(analysis_result)
 

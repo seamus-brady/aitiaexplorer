@@ -17,6 +17,8 @@ class SingleAnalysisResult():
         self.feature_list = None
         self.dot_format_string = None
         self.causal_graph = None
+        self.causal_graph_with_latent_edges = None
+        self.latent_edges = []
         self.AUPR = None
         self.SHD = None
 

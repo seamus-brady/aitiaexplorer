@@ -4,6 +4,7 @@ import pandas as pd
 from tests.unit import TestAPI
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
+from aitia_explorer.target_data.loader import TargetData
 
 
 class Test_Algorithms(TestAPI):
@@ -19,13 +20,6 @@ class Test_Algorithms(TestAPI):
     def tearDown(self):
         pass
 
-    ############### NOTEARS ##################
-
-    def test_algo_notears(self):
-        data_dir = os.path.join(self.data_dir, "charity.txt")
-        df = pd.read_table(data_dir, sep="\t")
-        adj_matrix = AlgorithmRunner.algo_notears(df)
-        self.assertTrue(adj_matrix is not None, "No graph returned.")
 
     ############### BayesEst ##################
     def test_algo_bayes_est(self):
@@ -104,3 +98,17 @@ class Test_Algorithms(TestAPI):
         df = pd.read_table(data_dir, sep="\t")
         dot_str = AlgorithmRunner.algo_rfci_mixed(df)
         self.assertTrue(dot_str is not None, "No graph returned.")
+
+    ############### Hill Climbing ##################
+    def test_algo_hill_climbing(self):
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+        dot_str = AlgorithmRunner.algo_hill_climber(df)
+        self.assertTrue(dot_str is not None, "No graph returned.")
+
+    ############### MIIC ##################
+    def test_algo_miic(self):
+        df = TargetData.hepar2_100_data()
+        df = df.drop(['fat', 'surgery', 'gallstones'], axis=1)
+        latent_edges = AlgorithmRunner.algo_miic(df)
+        self.assertTrue(len(latent_edges)==7, "No latent edges returned.")
