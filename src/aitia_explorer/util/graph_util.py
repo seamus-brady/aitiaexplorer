@@ -79,10 +79,19 @@ class GraphUtil():
         return causal_graph
 
     @staticmethod
-    def get_causal_graph_with_latent_edges(nx_graph, latent_edges):
+    def get_causal_graph_with_latent_edges(nx_graph, incoming_latent_edges):
         """
         Create a CausalGraphicalModel from an nxgraph with unobserved latent edges.
         """
+
+        # only add edges with where one of the nodes exist
+        latent_edges = []
+        for l in incoming_latent_edges:
+            node1 = l[0]
+            node2 = l[1]
+            if node1 in nx_graph.nodes() or node2 in nx_graph.nodes():
+                latent_edges.append(l)
+                
         # create a causal graph
         causal_graph = CausalGraphicalModel(
             nodes=nx_graph.nodes(),

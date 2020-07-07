@@ -2,8 +2,8 @@
 TBD Header
 """
 import logging
-import pandas as pd
 
+import pandas as pd
 from pycausal.pycausal import pycausal
 
 from aitia_explorer.algorithm_runner import AlgorithmRunner
@@ -18,10 +18,11 @@ from aitia_explorer.util.graph_util import GraphUtil
 _logger = logging.getLogger(__name__)
 
 
-class App():
+class App:
     """
     The main AitiaExplorer app entry point.
     """
+
     algo_runner = AlgorithmRunner()
     feature_selection = FeatureSelectionRunner()
     graph_metrics = GraphMetrics()
@@ -32,16 +33,107 @@ class App():
     def __init__(self):
         self.vm_running = False
 
+    def run_analysis_and_minimise_shd(self,
+                                      incoming_df,
+                                      target_graph_str=None,
+                                      feature_high=None,
+                                      feature_low=None,
+                                      feature_selection_list=None,
+                                      algorithm_list=None,
+                                      pc=None,
+                                      verbose=True
+                                      ):
+        """
+        Runs the entire analysis with feature selection and causal discovery but
+        also records the SHD for each run and returns the result that minimises SHD.
+        """
+        if feature_high is None:
+            # just default to number of features in dataframe
+            feature_high = len(list(incoming_df))
+
+        if feature_high is None:
+            # just default to 1
+            feature_low = 1
+
+        if target_graph_str is None:
+            # no target graph has been supplied, so let's create an approximation
+            # using the hill climbing algorithm
+            if verbose:
+                print("No target graph has been supplied.")
+                print("The system will generate an approximate target graph using the greedy hill climbing algorithm.")
+            target_graph_str = self.algo_runner.algo_hill_climber(incoming_df)
+
+        # caches for the loop
+        cached_min_shd = None
+        cached_result_obj, cached_results_df, cached_target_graph = None, None, None
+
+        for i in range(feature_high, feature_low, -1):
+
+            if verbose:
+                print("-----------------------------------------------")
+                print("Starting analysis with {0} features...".format(i))
+
+            # get current run results
+            result_obj, results_df, target_graph = self.run_analysis(
+                         incoming_df,
+                         target_graph_str=target_graph_str,
+                         n_features=i,
+                         feature_selection_list=feature_selection_list,
+                         algorithm_list=algorithm_list,
+                         pc=pc,
+                         verbose=verbose)
+
+            # cache the results
+            cached_result_obj, cached_results_df, cached_target_graph = result_obj, results_df, target_graph
+
+            # get the minimum SHD result
+            current_min_shd = results_df['SHD'].min()
+
+            # initialise the cached min
+            if cached_min_shd is None:
+                cached_min_shd = current_min_shd
+
+            # check to see if SHD is rising
+            if current_min_shd > cached_min_shd:
+                # SHD is rising, break the loop and use prev results
+                break
+            else:
+                # just store and continue
+                cached_min_shd = current_min_shd
+
+            if verbose:
+                print("Completed analysis with {0} features...".format(i))
+                print("-----------------------------------------------")
+
+        if verbose:
+            print("Done! Minimal SHD is {0}".format(cached_min_shd))
+
+        return cached_result_obj, cached_results_df, cached_target_graph
+
     def run_analysis(self,
                      incoming_df,
                      target_graph_str=None,
-                     n_features=10,
+                     n_features=None,
                      feature_selection_list=None,
                      algorithm_list=None,
-                     pc=None):
+                     pc=None,
+                     verbose=True):
         """
         Runs the entire analysis with feature selection and causal discovery.
         """
+
+        if n_features is None:
+            # just default to number of features in dataframe
+            n_features = len(list(incoming_df))
+
+        if target_graph_str is None:
+            # no target graph has been supplied, so let's create an approximation
+            # using the hill climbing algorithm
+            if verbose:
+                print("No target graph has been supplied.")
+                print("The system will generate an approximate target graph using the greedy hill climbing algorithm.")
+            target_graph_str = self.algo_runner.algo_hill_climber(incoming_df)
+
         feature_selection_list = self._get_feature_selection_algorithms(feature_selection_list)
 
         amalgamated_analysis_results = []
@@ -53,7 +145,8 @@ class App():
             # get the feature list from the function
             features = feature_func(incoming_df, n_features)
 
-            print("Running causal discovery on features selected by {0}".format(feature_selection[0]))
+            if verbose:
+                print("Running causal discovery on features selected by {0}".format(feature_selection[0]))
 
             # get the reduced dataframe
             df_reduced, requested_features = self.get_reduced_dataframe(incoming_df, features)
@@ -61,7 +154,9 @@ class App():
             # check to see if this reduced dataframe has introduced unobserved latent edges
             latent_edges = []
             latent_edges.extend(self.algo_runner.algo_miic(df_reduced))
-            print("There are {0} latent edges in the reduced dataset".format(len(latent_edges)))
+
+            if verbose:
+                print("There are {0} latent edges in the reduced dataset".format(len(latent_edges)))
 
             analysis_results = self._run_causal_algorithms(df_reduced,
                                                            feature_selection_method=feature_selection[0],
@@ -69,11 +164,16 @@ class App():
                                                            target_graph_str=target_graph_str,
                                                            algorithm_list=algorithm_list,
                                                            latent_edges=latent_edges,
-                                                           pc=pc)
+                                                           pc=pc,
+                                                           verbose=verbose)
+
+            if verbose:
+                print("Completed causal discovery on features selected by {0}".format(feature_selection[0]))
 
             amalgamated_analysis_results.append(analysis_results)
 
-        print("Completed analysis.")
+        if verbose:
+            print("Completed analysis.")
 
         # we need to flatten all the results
         amalgamated_list_of_dicts = []
@@ -85,7 +185,10 @@ class App():
                 # flatten the results
                 final_results.append(result)
 
-        return final_results, pd.DataFrame(amalgamated_list_of_dicts)
+        # generate the target graph for the user
+        target_graph = self.graph_util.get_causal_graph_from_dot(target_graph_str)
+
+        return final_results, pd.DataFrame(amalgamated_list_of_dicts), target_graph
 
     def run_causal_discovery(self, df, target_graph_str, algorithm_list, pc):
         """
@@ -111,7 +214,8 @@ class App():
                                algorithm_list=None,
                                target_graph_str=None,
                                latent_edges=[],
-                               pc=None):
+                               pc=None,
+                               verbose=True):
         """
         Runs an analysis on the supplied dataframe.
         This can take a PyCausalWrapper if multiple runs are being done.
@@ -135,7 +239,8 @@ class App():
             analysis_result.causal_algorithm = algo[0]
             analysis_result.latent_edges = latent_edges
 
-            print("Running causal discovery using {0}".format(algo[0]))
+            if verbose:
+                print("Running causal discovery using {0}".format(algo[0]))
 
             # get the graph from the algo
             algo_fn = algo[1]
@@ -148,7 +253,7 @@ class App():
             if dot_str is not None:
                 causal_graph = self.graph_util.get_causal_graph_from_dot(dot_str)
                 analysis_result.causal_graph = causal_graph
-                nx_graph =self.graph_util.get_digraph_from_dot(dot_str)
+                nx_graph = self.graph_util.get_digraph_from_dot(dot_str)
                 analysis_result.causal_graph_with_latent_edges = \
                     self.graph_util.get_causal_graph_with_latent_edges(nx_graph, latent_edges)
 
@@ -164,7 +269,6 @@ class App():
         # add the causal metrics
         updated_analysis_results = self._add_causal_metrics(analysis_results_filtered, target_graph_str)
 
-        print("Completed causal discovery.")
         return updated_analysis_results
 
     def _discover_graph(self, algo_fn, df, pc):
