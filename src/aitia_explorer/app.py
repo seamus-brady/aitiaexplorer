@@ -103,7 +103,6 @@ class App:
 
             if verbose:
                 print("Completed analysis with {0} features...".format(i))
-                print("-----------------------------------------------")
 
         if verbose:
             print("Done! Minimal SHD is {0}".format(cached_min_shd))
