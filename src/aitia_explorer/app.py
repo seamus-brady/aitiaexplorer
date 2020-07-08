@@ -33,16 +33,16 @@ class App:
     def __init__(self):
         self.vm_running = False
 
-    def run_analysis_and_minimise_shd(self,
-                                      incoming_df,
-                                      target_graph_str=None,
-                                      feature_high=None,
-                                      feature_low=None,
-                                      feature_selection_list=None,
-                                      algorithm_list=None,
-                                      pc=None,
-                                      verbose=True
-                                      ):
+    def run_analysis_with_high_low(self,
+                                   incoming_df,
+                                   target_graph_str=None,
+                                   feature_high=None,
+                                   feature_low=None,
+                                   feature_selection_list=None,
+                                   algorithm_list=None,
+                                   pc=None,
+                                   verbose=True
+                                   ):
         """
         Runs the entire analysis with feature selection and causal discovery but
         also records the SHD for each run and returns the result that minimises SHD.
@@ -63,9 +63,12 @@ class App:
                 print("The system will generate an approximate target graph using the greedy hill climbing algorithm.")
             target_graph_str = self.algo_runner.algo_hill_climber(incoming_df)
 
-        # caches for the loop
-        cached_min_shd = None
-        cached_result_obj, cached_results_df, cached_target_graph = None, None, None
+        # to store all the results
+        results_dict = dict()
+        all_results_df = pd.DataFrame()
+
+        # this is just so we can pass it back
+        returned_target_graph = None
 
         for i in range(feature_high, feature_low, -1):
 
@@ -74,7 +77,7 @@ class App:
                 print("Starting analysis with {0} features...".format(i))
 
             # get current run results
-            result_obj, results_df, target_graph = self.run_analysis(
+            result_obj, results_df, returned_target_graph = self.run_analysis(
                          incoming_df,
                          target_graph_str=target_graph_str,
                          n_features=i,
@@ -83,31 +86,35 @@ class App:
                          pc=pc,
                          verbose=verbose)
 
-            # cache the results
-            cached_result_obj, cached_results_df, cached_target_graph = result_obj, results_df, target_graph
-
-            # get the minimum SHD result
-            current_min_shd = results_df['SHD'].min()
-
-            # initialise the cached min
-            if cached_min_shd is None:
-                cached_min_shd = current_min_shd
-
-            # check to see if SHD is rising
-            if current_min_shd > cached_min_shd:
-                # SHD is rising, break the loop and use prev results
-                break
-            else:
-                # just store and continue
-                cached_min_shd = current_min_shd
+            results_dict[i] = (result_obj, results_df)
+            all_results_df = all_results_df.append(results_df,  ignore_index=True)
 
             if verbose:
                 print("Completed analysis with {0} features...".format(i))
 
-        if verbose:
-            print("Done! Minimal SHD is {0}".format(cached_min_shd))
+        # now we need to figure out the lowest SHD
+        shd_results_dict = dict()
 
-        return cached_result_obj, cached_results_df, cached_target_graph
+        # get the minimum shd for each run
+        for k, v in results_dict.items():
+            # dict holds a tuple, second value is df
+            results_df = v[1]
+            minimum_shd = results_df['SHD'].min()
+            shd_results_dict[k] = minimum_shd
+
+        # sort the shd
+        shd_tuple_list = sorted(shd_results_dict.items(), key=lambda x: x[1])
+
+        # first results are the best, first value in tuple is feature no / index
+        i = shd_tuple_list[0][0]
+
+        if verbose:
+            print("All done!")
+            print("The results with the lowest SHD have been returned.")
+
+        # return the results from the results dict
+        # --> results_obj, result_df, target_graph, all_results_df
+        return results_dict[i][0], results_dict[i][1], returned_target_graph, all_results_df
 
     def run_analysis(self,
                      incoming_df,
@@ -160,6 +167,7 @@ class App:
             analysis_results = self._run_causal_algorithms(df_reduced,
                                                            feature_selection_method=feature_selection[0],
                                                            requested_features=requested_features,
+                                                           n_features=n_features,
                                                            target_graph_str=target_graph_str,
                                                            algorithm_list=algorithm_list,
                                                            latent_edges=latent_edges,
@@ -210,6 +218,7 @@ class App:
                                incoming_df,
                                requested_features=None,
                                feature_selection_method=None,
+                               n_features=None,
                                algorithm_list=None,
                                target_graph_str=None,
                                latent_edges=[],
@@ -235,6 +244,7 @@ class App:
             analysis_result = SingleAnalysisResult()
             analysis_result.feature_selection_method = feature_selection_method
             analysis_result.feature_list = requested_features
+            analysis_result.num_features_requested = n_features
             analysis_result.causal_algorithm = algo[0]
             analysis_result.latent_edges = latent_edges
 

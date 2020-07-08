@@ -68,9 +68,39 @@ class Test_App(TestAPI):
         algorithm_list = []
         algorithm_list.append(aitia.algo_runner.PC)
         algorithm_list.append(aitia.algo_runner.FCI)
-        analysis_results, summary_df = aitia.run_analysis(df,
+        analysis_results, summary_df, _ = aitia.run_analysis(df,
                                                           target_graph_str=dot_str,
                                                           n_features=4,
+                                                          feature_selection_list=feature_selection_list,
+                                                          algorithm_list=algorithm_list,
+                                                          pc=pc)
+        self.assertTrue(analysis_results is not None)
+        self.assertTrue(summary_df is not None)
+
+    def test_run_analysis_with_high_low(self):
+        # setup
+        pc = pycausal()
+        pc.start_vm()
+        aitia = App()
+        data_dir = os.path.join(self.data_dir, "charity.txt")
+        df = pd.read_table(data_dir, sep="\t")
+
+        # just need a test graph
+        dot_str = aitia.algo_runner.algo_pc(df, pc)
+
+        # feature selection algos
+        feature_selection_list = []
+        feature_selection_list.append(aitia.feature_selection.LINEAR_REGRESSION)
+        feature_selection_list.append(aitia.feature_selection.PRINCIPAL_FEATURE_ANALYSIS)
+
+        # causal algo list
+        algorithm_list = []
+        algorithm_list.append(aitia.algo_runner.PC)
+        algorithm_list.append(aitia.algo_runner.FCI)
+        analysis_results, summary_df, _ = aitia.run_analysis_with_high_low(df,
+                                                          target_graph_str=dot_str,
+                                                          feature_high=5,
+                                                          feature_low=3,
                                                           feature_selection_list=feature_selection_list,
                                                           algorithm_list=algorithm_list,
                                                           pc=pc)
