@@ -1,6 +1,4 @@
-"""
-TBD Header
-"""
+
 import logging
 from collections import defaultdict
 

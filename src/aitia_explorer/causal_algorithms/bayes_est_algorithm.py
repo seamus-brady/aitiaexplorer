@@ -1,6 +1,4 @@
-"""
-TBD Header
-"""
+
 import logging
 from pycausal.pycausal import pycausal
 from pycausal import search as s

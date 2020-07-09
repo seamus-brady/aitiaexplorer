@@ -1,6 +1,4 @@
-"""
-TBD Header
-"""
+
 import logging
 
 import networkx as nx

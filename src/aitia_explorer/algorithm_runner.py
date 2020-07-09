@@ -1,6 +1,4 @@
-"""
-TBD Header
-"""
+
 import logging
 
 from aitia_explorer.causal_algorithms.bayes_est_algorithm import BayesEstAlgorithm
