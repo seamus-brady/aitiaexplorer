@@ -1,8 +1,22 @@
 # AitaExplorer
 
-Causal discovery and causal inference tool.
 
-The word aitía comes from the Ancient Greek word αιτία used in early philosophy to mean 'cause'.
+The word _aitia_ comes from the Ancient Greek word _αιτία_ used in early Philosophy to mean _cause_.
+
+AitiaExplorer is a causal discovery exploration tool.
+It allows a user to explore selections of features in a large dataset for causal connections.
+
+## Overview
+
+- AitiaExplorer takes in a random dataset, in the form a Pandas Dataframe.
+- The important features of the dataset will be extracted automatically using a variery of unsupervised learning algorithms. 
+- AitiaExplorer will automatically discovery causal graphs based on these subsets of features.
+- The best performing causal graph will be returned for further analysis.
+- AitiaExplorer will work with data where a causal model is known but can also automatically generate an approximate causal graph where no graph is known.
+
+## Usage
+
+For examples of how AitiaExplorer can be used, please see the Jupyter Notebooks in the notebooks folder.
 
 
 ## Requirements
@@ -29,6 +43,7 @@ Install the python dependencies using pip:
 ```
 pip install -r /path/to/requirements.txt
 ```
+
 
 ## License
 

@@ -24,7 +24,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#
 
 import logging
-import networkx as nx
 import aitia_explorer.causal_algorithms.notears as notears
 
 from aitia_explorer.causal_algorithms.algorithm_constants import AlgorithmConstants

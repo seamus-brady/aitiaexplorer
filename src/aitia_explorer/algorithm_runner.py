@@ -82,10 +82,7 @@ class AlgorithmRunner:
                 self.GFCI_mixed_data,
                 self.RFCI_continuous,
                 self.RFCI_discrete,
-                self.RFCI_mixed_data,
-                self.NOTEARS,
-                self.HILL_CLIMBING,
-                self.MIIC
+                self.RFCI_mixed_data
                 ]
 
     # -------------------------------------------------------------------------------------------------
