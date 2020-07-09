@@ -2,6 +2,8 @@
 
 Causal discovery and causal inference tool.
 
+The word aitía comes from the Ancient Greek word αιτία used in early philosophy to mean 'cause'.
+
 
 ## Requirements
 
