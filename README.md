@@ -3,17 +3,30 @@
 Causal discovery and causal inference tool.
 
 
-## Setup Notes
+## Requirements
 
-### Requirements
+You will need 
+- Python 3.7+
+- pip 
 
-Install the requirements:
+To view the Jupyter Notebook examples, you will also need Anaconda installed.
+
+## Setup
+
+Clone this repository:
 ```
-pip install causality
-pip install 'networkx<=2.3'
-pip install dowhy
+git clone git@github.com:corvideon/aitiaexplorer.git
+```
+Change to the directory contain AitiaExplorer:
+
+```
+cd aitiaexplorer
 ```
 
+Install the python dependencies using pip:
+```
+pip install -r /path/to/requirements.txt
+```
 
 ## References
 
