@@ -9,7 +9,7 @@
 - Other causal algorithms are listed also.
 
 
-## Causal Algorithm List
+## py-causal Algorithm List
 
 - Each algorithm is listed alongside the metadata that is available from within py-causal.
 - The Algorithm ID is the name as listed in py-causal / Tetrad.
@@ -50,16 +50,27 @@ Algorithm ID:  fges
 
 *The algorithms requires a decomposable score—that is, a score that for the entire DAG model is a sum of logged scores of each variables given its parents in the model. The algorithms can take all continuous data (using the SEM BIC score), all discrete data (using the BDeu score) or a mixture of continuous and discrete data (using the Conditional Gaussian score); these are all decomposable scores.*
 
-
 https://www.ccd.pitt.edu//wiki/index.php?title=Fast_Greedy_Equivalence_Search_(FGES)_Algorithm_for_Continuous_Variables
 
 ### GFCI Algorithm
+
+Algorithm ID:  gfci
+
+*GFCI is a combination of the FGES [CCD-FGES, 2016] algorithm and the FCI algorithm [Spirtes, 1993] that improves upon the accuracy and efficiency of FCI. In order to understand the basic methodology of GFCI, it is necessary to understand some basic facts about the FGES and FCI algorithms. The FGES algorithm is used to improve the accuracy of both the adjacency phase and the orientation phase of FCI by providing a more accurate initial graph that contains a subset of both the non-adjacencies and orientations of the final output of FCI. The initial set of nonadjacencies given by FGES is augmented by FCI performing a set of conditional independence tests that lead to the removal of some further adjacencies whenever a conditioning set is found that makes two adjacent variables independent. After the adjacency phase of FCI, some of the orientations of FGES are then used to provide an initial orientation of the undirected graph that is then augmented by the orientation phase of FCI to provide additional orientations. A verbose description of GFCI can be found here (discrete variables) and here (continuous variables).*
 
 https://www.ccd.pitt.edu/wiki/index.php/Greedy_Fast_Causal_Inference_(GFCI)_Algorithm_for_Continuous_Variables
 
 ### RFCI Algorithm
 
+Algorithm ID:  rfci
+
+*A modification of the FCI algorithm in which some expensive steps are finessed and the output is somewhat differently interpreted. In most cases this runs faster than FCI (which can be slow in some steps) and is almost as informative. See Colombo et al., 2012.*
+
 https://www.rdocumentation.org/packages/pcalg/versions/2.6-10/topics/rfci
+
+## Other Causal Algorithms
+
+### NOTEARS
  
 The NOTEARS algorithm is made available for use but is not run automatically by AitiaExplorer at the moment.
 This algorithm returns an unlabelled adjacency matrix rather than a causal graph, making less useful for display even though it is very efficient:
@@ -68,7 +79,7 @@ This algorithm returns an unlabelled adjacency matrix rather than a causal graph
  
  _Python package implementing "DAGs with NO TEARS: Smooth Optimization for Structure Learning", Xun Zheng, Bryon Aragam, Pradeem Ravikumar and Eric P. Xing (March 2018, arXiv:1803.01422)_
  
-## Related Algorithm List
+## Related Algorithms
  
 The following two algorithms are exposed by the [pyAgrum](https://agrum.gitlab.io/pages/pyagrum.html) project.
 
