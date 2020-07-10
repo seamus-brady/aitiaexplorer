@@ -1,8 +1,14 @@
-## Causal Discovery Algorithms Available in AitiaExplorer
+# Causal Discovery Algorithms in AitiaExplorer
 
-The causal discovery algorithms below are used in AitiaExplorer as available in the py-causal project which are implemented in Java and reached via a Java-Python interop framework (https://github.com/CellProfiler/python-javabridge/).
+## Overview
 
-Unfortunately there is a not a huge amount of documentation available, so in some cases a link has been provided to the original R implementation documentation.
+- The causal discovery algorithms below are used in AitiaExplorer.
+- These are made available in the [https://github.com/bd2kccd/py-causal](py-causal) project which is used internally in AitiaExplorer.
+- They are implemented in Java and reached via a Java-Python interop framework (https://github.com/CellProfiler/python-javabridge/).
+- Unfortunately there is a not a huge amount of documentation available, so in some cases a link has been provided to the original R implementation documentation.
+
+
+## Causal Algorithm List
 
  - bayesEst: https://rdrr.io/github/bd2kccd/r-causal/man/bayesEst.html
  - PC: https://www.rdocumentation.org/packages/pcalg/versions/2.6-10/topics/pc
@@ -10,6 +16,9 @@ Unfortunately there is a not a huge amount of documentation available, so in som
  - FGES: https://www.ccd.pitt.edu//wiki/index.php?title=Fast_Greedy_Equivalence_Search_(FGES)_Algorithm_for_Continuous_Variables
  - GFCI: https://www.ccd.pitt.edu/wiki/index.php/Greedy_Fast_Causal_Inference_(GFCI)_Algorithm_for_Continuous_Variables
  - RFCI: https://www.rdocumentation.org/packages/pcalg/versions/2.6-10/topics/rfci
+ 
+ 
+## Related Algorithm List
  
 The following algorithm is made available for use but is not run automatically by AitiaExplorer at the moment:
 

@@ -55,7 +55,7 @@ The main libraries used are:
 
 ## Causal Discovery Algorithms Available in AitiaExplorer
 
-Please see [here](Algorithms.md) for a list of the causal discovery algorithms available in AitiaExplorer.
+- [List of the causal discovery algorithms available in AitiaExplorer](Algorithms.md).
  
 ## License
 
