@@ -353,7 +353,7 @@ class App:
                 else:
                     prec_recall = 0
                     shd = 0
-                result.AUPR = prec_recall
+                result.AUPRC = prec_recall
                 result.SHD = shd
             return_analysis_results.results.append(result)
         return return_analysis_results

@@ -42,7 +42,7 @@ class SingleAnalysisResult():
         self.causal_graph = None
         self.causal_graph_with_latent_edges = None
         self.latent_edges = []
-        self.AUPR = None
+        self.AUPRC = None
         self.SHD = None
 
 
@@ -56,6 +56,6 @@ class SingleAnalysisResult():
                 'Feature Selection Method': self.feature_selection_method,
                 # leaving this out as it contain too much information
                 #'feature list': self.feature_list,
-                'AUPR': self.AUPR,
+                'AUPRC': self.AUPRC,
                 'SHD': self.SHD
                 }
