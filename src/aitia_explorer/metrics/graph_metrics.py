@@ -58,7 +58,7 @@ class GraphMetrics:
             raise TypeError("Only networkx.DiGraph and np.ndarray (adjacency matrixes) are supported.")
 
     def precision_recall(self, target, prediction, low_confidence_undirected=False):
-        r"""Compute precision-recall statistics for directed graphs.
+        """Compute precision-recall statistics for directed graphs.
 
         Precision recall statistics are useful to compare causal_algorithms that make
         predictions with a confidence score. Using these statistics, performance

@@ -66,8 +66,22 @@ class App:
                                    verbose=True
                                    ):
         """
-        Runs the entire analysis with feature selection and causal discovery but
-        also records the SHD for each run and returns the result that minimises SHD.
+        Runs the entire analysis with feature selection and causal discovery between a high and low range
+        of features. Returns the best results in a separate dataframe.
+
+        :param incoming_df: dataframe
+        :param target_graph_str: string in dot format
+        :param feature_high: number of features range end
+        :param feature_low: number of features range start
+        :param feature_selection_list: list of feature selection algorithms
+        :param algorithm_list: list of causals discovery algorithms
+        :param pc: py-causal object for java vm communication
+        :param verbose: verbose boolean
+        :return: tuple:
+            (AnalysisResults obj,
+            best result dataframe,
+            target graph (approximated or oetherwise),
+            all results dataframe)
         """
         if feature_high is None:
             # just default to number of features in dataframe
@@ -100,16 +114,16 @@ class App:
 
             # get current run results
             result_obj, results_df, returned_target_graph = self.run_analysis(
-                         incoming_df,
-                         target_graph_str=target_graph_str,
-                         n_features=i,
-                         feature_selection_list=feature_selection_list,
-                         algorithm_list=algorithm_list,
-                         pc=pc,
-                         verbose=verbose)
+                incoming_df,
+                target_graph_str=target_graph_str,
+                n_features=i,
+                feature_selection_list=feature_selection_list,
+                algorithm_list=algorithm_list,
+                pc=pc,
+                verbose=verbose)
 
             results_dict[i] = (result_obj, results_df)
-            all_results_df = all_results_df.append(results_df,  ignore_index=True)
+            all_results_df = all_results_df.append(results_df, ignore_index=True)
 
             if verbose:
                 print("Completed analysis with {0} features...".format(i))
@@ -148,6 +162,19 @@ class App:
                      verbose=True):
         """
         Runs the entire analysis with feature selection and causal discovery.
+        Takes a specific number of features to return.
+
+        :param incoming_df: dataframe
+        :param target_graph_str: string in dot format
+        :param n_features: number of features to select (defaults to all if None supplied)
+        :param feature_selection_list: list of feature selection algorithms
+        :param algorithm_list: list of causals discovery algorithms
+        :param pc: py-causal object for java vm communication
+        :param verbose: verbose boolean
+        :return: tuple:
+            (AnalysisResults obj,
+            all results dataframe,
+            target graph (approximated or oetherwise))
         """
 
         if n_features is None:
@@ -222,6 +249,13 @@ class App:
     def run_causal_discovery(self, df, target_graph_str, algorithm_list, pc):
         """
         Runs the causal discovery.
+        :param df: dataframe
+        :param target_graph_str: string in dot format
+        :param algorithm_list: list of causals discovery algorithms
+        :param pc: py-causal object for java vm communication
+        :return: tuple:
+            (AnalysisResults obj,
+            all results dataframe)
         """
         analysis_results = self._run_causal_algorithms(df,
                                                        target_graph_str=target_graph_str,
@@ -247,7 +281,7 @@ class App:
                                pc=None,
                                verbose=True):
         """
-        Runs an analysis on the supplied dataframe.
+        Internal. Runs an analysis on the supplied dataframe.
         This can take a PyCausalWrapper if multiple runs are being done.
         """
         analysis_results = AnalysisResults()

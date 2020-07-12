@@ -52,16 +52,29 @@ class TargetData:
 
     @staticmethod
     def data_dir():
+        """
+        Get the data dir.
+        :return: dir.
+        """
         data_dir = os.path.join(os.path.dirname(__file__), 'data')
         return data_dir
 
     @staticmethod
     def graphs_dir():
+        """
+        Get the graph dir.
+        :return: dir
+        """
         graphs_dir = os.path.join(os.path.dirname(__file__), 'graphs')
         return graphs_dir
 
     @staticmethod
     def simulated_data_1_graph():
+        """
+        Simulated graph produced by Tetrad.
+        See http://www.phil.cmu.edu/tetrad/
+        :return: graph string in dot format
+        """
         graph_path = os.path.join(TargetData.graphs_dir(), "simulated_data_graph_1.dot")
         with open(graph_path, 'r') as dot_file:
             simulated_data_graph = dot_file.read()
@@ -69,6 +82,13 @@ class TargetData:
 
     @staticmethod
     def hepar2_graph():
+        """
+        HEPAR II graph.
+        Loads this from a BIF file.
+        See hepar2_graph for the associated causal graph.
+        See https://www.ccd.pitt.edu/wiki/index.php/Data_Repository
+        :return: graph string in dot format
+        """
         graph_path = os.path.join(TargetData.graphs_dir(), "hepar2.bif")
         reader = BIFReader(graph_path)
         csm = GraphUtil.get_causal_graph_from_bif(reader)
@@ -76,23 +96,40 @@ class TargetData:
 
     @staticmethod
     def simulated_data_1():
+        """
+        Simulated data produced by Tetrad.
+        See http://www.phil.cmu.edu/tetrad/
+        :return: dataframe
+        """
         data_dir = os.path.join(TargetData.data_dir(), "simulated_data_1.txt")
         simulated_data = pd.read_table(data_dir, sep="\t")
         return simulated_data
 
     @staticmethod
     def audiology_data():
+        """
+        Simulated data provided with Tetrad.
+        See http://www.phil.cmu.edu/tetrad/
+        :return: dataframe
+        """
         data_dir = os.path.join(TargetData.data_dir(), "audiology.txt")
         return pd.read_table(data_dir, sep="\t")
 
     @staticmethod
     def charity_data():
+        """
+        Simulated data provided with Tetrad.
+        See http://www.phil.cmu.edu/tetrad/
+        :return: dataframe
+        """
         data_dir = os.path.join(TargetData.data_dir(), "charity.txt")
         return pd.read_table(data_dir, sep="\t")
 
     @staticmethod
     def lucas0_data():
         """
+        LUCAS  (LUng CAncer Simple set) contain toy data generated artificially
+        by causal Bayesian networks with binary variables.
         See http://www.causality.inf.ethz.ch/data/LUCAS.html
         :return:
         """
@@ -102,6 +139,8 @@ class TargetData:
     @staticmethod
     def lucas2_data():
         """
+        LUCAS  (LUng CAncer Simple set) contain toy data generated artificially
+        by causal Bayesian networks with binary variables.
         See http://www.causality.inf.ethz.ch/data/LUCAS.html
         :return:
         """
@@ -111,8 +150,10 @@ class TargetData:
     @staticmethod
     def hepar2_10k_data():
         """
+        HEPAR II dataset - full 10k dataset.
+        See hepar2_graph for the associated causal graph.
         See https://www.ccd.pitt.edu/wiki/index.php/Data_Repository
-        :return:
+        :return: scaled dataframe
         """
         # load the data
         data_dir = os.path.join(TargetData.data_dir(), "HEPARTWO10k.csv")
@@ -130,8 +171,10 @@ class TargetData:
     @staticmethod
     def hepar2_100_data():
         """
+        HEPAR II dataset - first 100 rows from dataset.
+        See hepar2_graph for the associated causal graph.
         See https://www.ccd.pitt.edu/wiki/index.php/Data_Repository
-        :return:
+        :return: scaled dataframe
         """
         # load the data
         data_dir = os.path.join(TargetData.data_dir(), "HEPARTWO100.csv")
@@ -149,7 +192,7 @@ class TargetData:
     @staticmethod
     def scm1():
         """
-        Returns a StructuralCausalModel for sampling
+        Returns a StructuralCausalModel for sampling.
         See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
         :return:
         """
@@ -168,9 +211,9 @@ class TargetData:
     @staticmethod
     def scm2():
         """
-        Returns a StructuralCausalModel for sampling
+        Returns a StructuralCausalModel for sampling.
         See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
-        :return:
+        :return: StructuralCausalModel
         """
         return StructuralCausalModel({
             'a': lambda n_samples: np.random.normal(size=n_samples),
@@ -186,7 +229,7 @@ class TargetData:
     @staticmethod
     def scm3():
         """
-        Returns a StructuralCausalModel for sampling
+        Returns a StructuralCausalModel for sampling.
         See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
         :return:
         """
@@ -211,7 +254,8 @@ class TargetData:
     def random_scm1():
         """
         Generates a random SCM.
-        :return:
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return: StructuralCausalModel
         """
         return StructuralCausalModel({
             'X1': linear_model(['X20', 'X8'], [random.uniform(0, 1), random.uniform(0, 1)]),
@@ -240,7 +284,8 @@ class TargetData:
     def random_scm2():
         """
         Generates a random SCM.
-        :return:
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return: StructuralCausalModel
         """
         return StructuralCausalModel({
             'X1': lambda n_samples: np.random.normal(size=n_samples),
@@ -282,7 +327,8 @@ class TargetData:
     def random_scm_treatment_outcome():
         """
         Generates a random SCM with treatment (X12) and outcome (X18).
-        :return:
+        See https://github.com/ijmbarr/causalgraphicalmodels/blob/master/causalgraphicalmodels/examples.py
+        :return: StructuralCausalModel
         """
         return StructuralCausalModel({
             'X1': lambda n_samples: np.random.normal(size=n_samples),
