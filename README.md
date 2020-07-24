@@ -3,7 +3,7 @@
 
 The word _aitia_ comes from the Ancient Greek word _αιτία_ used in early Philosophy to mean _cause_.
 
- - AitiaExplorer is an experimental** causal discovery exploration tool.
+ - AitiaExplorer is an experimental causal discovery exploration tool.
  - It allows a user to explore selections of features in a dataset for causal connections.
 
 ## Overview
