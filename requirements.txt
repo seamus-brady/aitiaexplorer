@@ -76,7 +76,7 @@ pycparser==2.20
 pydot==1.4.1
 pydotplus==2.0.2
 pygam==0.8.0
-Pygments==2.6.1
+Pygments==2.7.4
 pygraphviz==1.5
 pyinotify==0.9.6
 pyOpenSSL==19.1.0
